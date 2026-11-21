@@ -1,0 +1,9 @@
+{
+  "title": "Classes and subjects", "intro": "Create the school's classes and subjects, edit them, then choose which subjects each class takes. Arms (such as the A in JSS 1A) are optional.",
+  "classes": "Classes", "noClasses": "No classes yet. Add JSS 1 to SSS 3 below.", "stage": "Stage", "year": "Year", "arm": "Arm (optional)", "addClass": "Add class",
+  "subjects": "Subjects", "noSubjects": "No subjects yet.", "subject": "Subject", "code": "Code", "codeOptional": "Code (optional)", "subjectName": "Subject name", "addSubject": "Add subject",
+  "editClass": "Edit {{name}}", "editSubject": "Edit {{name}}", "saveChanges": "Save changes", "deleteClass": "Delete class", "deleteSubject": "Delete subject",
+  "confirmDeleteClass": "Delete {{name}}? This only works for a class nothing refers to.", "confirmDeleteSubject": "Delete {{name}}? This only works for a subject nothing refers to.",
+  "changeNote": "Changing a class's stage, year or arm renames it everywhere, including on past records.",
+  "takenBy": "Subjects taken by a class", "addFirst": "Add at least one class and one subject first.", "classLabel": "Class", "subjectsFor": "Subjects for this class", "saveSubjects": "Save subjects", "subjectsSaved": "Subjects saved.", "updated": "Changes saved.", "deleted": "Deleted."
+}

@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Public Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Literata", Georgia, serif;
+  --font-arabic: "Cairo", "Noto Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-50: #f1f8ec;
+  --color-brand-100: #ddefd0;
+  --color-brand-200: #bcdfa2;
+  --color-brand-500: #438f17;
+  --color-brand-600: #387712;
+  --color-brand-700: #2d5f0f;
+  --color-brand-900: #17330a;
+
+  --color-gold-100: #fbf5d0;
+  --color-gold-400: #eed13f;
+  --color-gold-500: #d9bb22;
+
+  --color-ink: #1c2417;
+  --color-muted: #5b6655;
+  --color-line: #d9dfd3;
+  --color-paper: #fbfcf9;
+  --color-surface: #ffffff; /* cards, inputs, tables: white in light mode, a raised dark green in dark mode */
+  --color-surface-2: #f1f8ec;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  background: var(--color-paper);
+}
+:focus-visible {
+  outline: 3px solid var(--color-gold-500);
+  outline-offset: 2px;
+}
+
+@media print {
+  aside,
+  header,
+  .no-print {
+    display: none !important;
+  }
+  #root > div {
+    display: block !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+  body {
+    background: #fff;
+  }
+}
+
+/* ---------- Arabic: font and right-to-left ---------- */
+html[lang="ar"] body,
+html[lang="ar"] .font-display {
+  font-family: var(--font-arabic);
+}
+/* Layouts use logical utilities (ms-, me-, ps-, pe-, text-start). The few older physical ones are mirrored here. */
+[dir="rtl"] .text-left { text-align: right; }
+[dir="rtl"] .text-right { text-align: left; }
+[dir="rtl"] .ml-1 { margin-left: 0; margin-right: 0.25rem; }
+[dir="rtl"] .ml-2, [dir="rtl"] .lg\:ml-2 { margin-left: 0; margin-right: 0.5rem; }
+[dir="rtl"] .ml-4 { margin-left: 0; margin-right: 1rem; }
+[dir="rtl"] .ml-auto { margin-left: 0; margin-right: auto; }
+[dir="rtl"] .mr-2 { margin-right: 0; margin-left: 0.5rem; }
+[dir="rtl"] .mr-3 { margin-right: 0; margin-left: 0.75rem; }
+[dir="rtl"] .pl-5 { padding-left: 0; padding-right: 1.25rem; }
+[dir="rtl"] .pl-6 { padding-left: 0; padding-right: 1.5rem; }
+[dir="rtl"] .pr-3 { padding-right: 0; padding-left: 0.75rem; }
+[dir="rtl"] .pr-4 { padding-right: 0; padding-left: 1rem; }
+[dir="rtl"] .border-l-4 { border-left-width: 0; border-right-width: 4px; }
+[dir="rtl"] .rtl-flip { transform: scaleX(-1); }
+/* Emails, phone numbers, ids, URLs and amounts keep their left-to-right order inside Arabic text. */
+.ltr-text { direction: ltr; unicode-bidi: isolate; display: inline-block; }
+bdi, [data-ltr] { unicode-bidi: isolate; }
+
+/* ---------- Dark theme (screen only: printing and PDFs always stay light) ---------- */
+@media screen {
+  html.dark {
+    color-scheme: dark;
+    --color-ink: #e6ede1;
+    --color-muted: #a6b39f;
+    --color-line: #2e3d29;
+    --color-paper: #0f1510;
+    --color-surface: #172016;
+    --color-surface-2: #1d2a19;
+  }
+  html.dark body { background: var(--color-paper); color: var(--color-ink); }
+  /* Surfaces */
+  html.dark .bg-white { background-color: var(--color-surface); }
+  html.dark .bg-brand-50, html.dark .hover\:bg-brand-50:hover { background-color: #1d2a19; }
+  html.dark .bg-brand-100 { background-color: #263a1d; }
+  html.dark .bg-gray-100, html.dark .bg-gray-50 { background-color: #202c1d; }
+  html.dark .bg-gold-100 { background-color: #3a3410; }
+  html.dark .bg-red-50 { background-color: #3a1818; }
+  html.dark .bg-red-100 { background-color: #4a1d1d; }
+  html.dark .bg-green-50, html.dark .bg-green-100 { background-color: #17361f; }
+  html.dark .bg-yellow-50, html.dark .bg-yellow-100, html.dark .bg-amber-50, html.dark .bg-amber-100 { background-color: #3a3410; }
+  html.dark .bg-blue-50, html.dark .bg-blue-100 { background-color: #14283d; }
+  html.dark .bg-paper { background-color: var(--color-paper); }
+  /* Text */
+  html.dark .text-brand-700, html.dark .text-brand-600, html.dark .text-brand-500 { color: #93d263; }
+  html.dark .text-brand-900 { color: #d3ecc2; }
+  html.dark .bg-gold-400 .text-brand-900, html.dark .bg-gold-400.text-brand-900, html.dark .bg-brand-500 .text-brand-900 { color: #17330a; }
+  html.dark .text-gray-500, html.dark .text-gray-600, html.dark .text-gray-700 { color: #b4bfae; }
+  html.dark .text-gray-800, html.dark .text-gray-900 { color: #e6ede1; }
+  html.dark .text-red-600, html.dark .text-red-700, html.dark .text-red-800, html.dark .text-red-900 { color: #fca5a5; }
+  html.dark .text-green-700, html.dark .text-green-800, html.dark .text-green-900 { color: #86efac; }
+  html.dark .text-yellow-800, html.dark .text-yellow-900, html.dark .text-amber-800, html.dark .text-amber-900 { color: #fde68a; }
+  html.dark .text-blue-700, html.dark .text-blue-800 { color: #93c5fd; }
+  /* Borders */
+  html.dark .border-red-300, html.dark .border-red-200 { border-color: #7f2a2a; }
+  html.dark .border-green-300 { border-color: #2f6b3e; }
+  html.dark .border-gray-200, html.dark .border-gray-300 { border-color: var(--color-line); }
+  html.dark .border-brand-200 { border-color: #35502a; }
+  html.dark .border-gold-400 { border-color: #d9bb22; }
+  /* Form controls */
+  html.dark input, html.dark select, html.dark textarea { background-color: #121a11; color: var(--color-ink); border-color: #3a4b34; }
+  html.dark input::placeholder, html.dark textarea::placeholder { color: #7f8c78; }
+  html.dark input:disabled, html.dark select:disabled, html.dark textarea:disabled { background-color: #1a241a; color: #8d9a86; }
+  html.dark table { color: var(--color-ink); }
+  html.dark thead { background-color: #1d2a19; }
+  html.dark tr:hover td { background-color: rgba(255, 255, 255, 0.02); }
+  html.dark img { filter: brightness(0.92); }
+  html.dark .keep-colour, html.dark .card-light img { filter: none; }
+  /* An ID card preview always shows the printed (light) card, whatever the theme. */
+  html.dark .card-light { background-color: #ffffff !important; color: #111827 !important; }
+  html.dark .card-light .text-gray-500 { color: #6b7280; }
+  html.dark .card-light .text-gray-600 { color: #4b5563; }
+  html.dark .card-light .text-gray-700 { color: #374151; }
+  html.dark ::selection { background: #3f6b27; color: #fff; }
+  html.dark ::-webkit-scrollbar { background: #121a11; }
+  html.dark ::-webkit-scrollbar-thumb { background: #2f3f2a; border-radius: 6px; }
+}
+@media print {
+  html.dark { color-scheme: light; }
+}

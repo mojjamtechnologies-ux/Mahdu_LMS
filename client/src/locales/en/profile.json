@@ -1,0 +1,10 @@
+{
+  "title": "My profile", "intro": "Your photograph, contact details and display preferences.",
+  "photo": { "title": "Profile photograph", "choose": "Choose a photograph", "change": "Change photograph", "remove": "Remove photograph", "save": "Save photograph", "cancelPick": "Cancel",
+    "hint": "JPG, PNG or WebP, up to 5 MB. A square picture of your face works best.", "uploading": "Uploading… {{percent}}%", "saved": "Your photograph has been updated.", "removed": "Your photograph has been removed.",
+    "previewLabel": "Preview", "badType": "Please choose a JPG, PNG or WebP picture.", "tooBig": "That picture is larger than 5 MB. Please choose a smaller one.", "confirmRemove": "Remove your photograph?" },
+  "details": { "title": "Your details", "name": "Name", "email": "Email", "phone": "Phone number", "status": "Account status", "memberSince": "Member since",
+    "admission": "Admission number", "staff": "Staff number", "class": "Class", "session": "Academic session", "designation": "Designation", "teaches": "Classes you teach", "children": "Children linked to you",
+    "nameNote": "To change your name or email address, please contact the school office.", "savePhone": "Save phone number", "phoneSaved": "Phone number saved." },
+  "preferences": { "title": "Display preferences", "intro": "These apply on this device and stay the same when you sign in again." }
+}
