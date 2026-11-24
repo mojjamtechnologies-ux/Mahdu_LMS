@@ -31,7 +31,7 @@ export const setSessionLostHandler = (fn: () => void) => {
 };
 // A small "was signed in" hint, so a signed-out visitor does not call /auth/refresh at all (that call can only fail with a 401,
 // and the browser prints every failed request in red). It holds no token: the real session is still the secure cookie.
-const HINT = "kok_session";
+const HINT = "mrei_session";
 const hint = {
   get: () => {
     try {

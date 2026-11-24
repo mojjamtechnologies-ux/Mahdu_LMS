@@ -10,7 +10,7 @@ How to get the project running on a new computer, and where everything lives.
 ## 2. Get the code and install
 ```bash
 git clone <your repository>
-cd KOK
+cd MREI
 cd server && npm install && cd ..
 cd client && npm install && cd ..
 ```

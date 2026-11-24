@@ -25,7 +25,7 @@ const ALIASES: Record<string, string> = {
 };
 const REQUIRED = ["firstName", "lastName", "email", "admissionNumber"];
 export const TEMPLATE =
-  "firstName,lastName,email,admissionNumber,phone,dateOfBirth,class\nAda,Okafor,ada.okafor@example.com,KOK/2026/001,08012345678,2013-05-21,JSS 1A\n";
+  "firstName,lastName,email,admissionNumber,phone,dateOfBirth,class\nAda,Okafor,ada.okafor@example.com,MREI/2026/001,08012345678,2013-05-21,Ihdaady Awwal A\n";
 
 export interface RowError {
   row: number;
@@ -73,9 +73,9 @@ async function analyse(csv: string) {
   const clean: Clean[] = [];
   const classes = (
     await query(
-      "select id, upper(replace(stage::text || year::text || coalesce(arm, ''), ' ', '')) as k from classes",
+      "select id, upper(replace(class_label(stage, year, arm), ' ', '')) as k, upper(replace(stage::text || year::text || coalesce(arm, ''), ' ', '')) as old_k from classes",
     )
-  ).rows as { id: string; k: string }[];
+  ).rows as { id: string; k: string; old_k: string }[];
   const session = (
     await query("select id from academic_sessions where is_current")
   ).rows[0] as { id: string } | undefined;
@@ -129,10 +129,10 @@ async function analyse(csv: string) {
     let classId: string | null = null;
     if (v.class) {
       const hit = classes.find(
-        (c) => c.k === v.class.toUpperCase().replace(/\s+/g, ""),
+        (c) => { const typed = v.class.toUpperCase().replace(/\s+/g, ""); return c.k === typed || c.old_k === typed; }, // the new name, or the old style such as JSS1A
       );
       if (!hit)
-        err("class", `No class called "${v.class}". Use names such as JSS 1A.`);
+        err("class", `No class called "${v.class}". Use names such as Ihdaady Awwal A.`);
       else if (!session)
         err(
           "class",

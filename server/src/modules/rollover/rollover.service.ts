@@ -1,8 +1,9 @@
 import { query, withTransaction, Queryable } from '../../db/pool';
 import { AppError } from '../../utils/AppError';
 import { audit } from '../../services/audit';
+import { classLabel, maxYear } from '../../utils/academicNames';
 
-const CLASS_NAME = `c.stage || ' ' || c.year || coalesce(c.arm, '')`;
+const CLASS_NAME = `class_label(c.stage, c.year, c.arm)`;
 type Ctx = { actorId: string; ip?: string };
 export interface RolloverOptions {
   fromSessionId: string; toSessionId: string;
@@ -13,11 +14,11 @@ export interface RolloverOptions {
   carryFormTeachers?: boolean; carryTeachingAssignments?: boolean; carryTimetable?: boolean;
 }
 interface Cls { id: string; stage: 'JSS' | 'SSS'; year: number; arm: string | null; name: string }
-const label = (c: { stage: string; year: number; arm: string | null }) => `${c.stage} ${c.year}${c.arm ?? ''}`;
+const label = (c: { stage: string; year: number; arm: string | null }) => classLabel(c);
 
-// JSS 1 -> 2 -> 3 -> SSS 1 -> 2 -> 3 -> graduate. The arm is kept when the next class has the same one.
+// Ihdaady Awwal -> Thaany -> Thaalith -> Raabih -> Thaanawiy Awwal -> Thaaniy -> Thaalith -> graduate. The arm is kept when the next class has the same one.
 function nextOf(c: { stage: string; year: number; arm: string | null }): { stage: 'JSS' | 'SSS'; year: number; arm: string | null } | 'graduate' {
-  if (c.year < 3) return { stage: c.stage as 'JSS' | 'SSS', year: c.year + 1, arm: c.arm };
+  if (c.year < maxYear(c.stage)) return { stage: c.stage as 'JSS' | 'SSS', year: c.year + 1, arm: c.arm };
   if (c.stage === 'JSS') return { stage: 'SSS', year: 1, arm: c.arm };
   return 'graduate';
 }

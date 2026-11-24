@@ -24,7 +24,7 @@ export default function Teaching() {
   return (
     <>
       <PageHeader title="Teaching assignments" intro={current ? `Who teaches what in ${current.name}. A subject must first be added to the class under Classes and subjects.` : 'Who teaches what in the current session.'} />
-      {!sessions.loading && !current && <div className="mb-4"><Alert tone="error">No session is current. Set one under Sessions and terms first.</Alert></div>}
+      {!sessions.loading && !current && <div className="mb-4"><Alert tone="error">No session is current. Set one under Sessions and semesters first.</Alert></div>}
       <div className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <Card title="Current assignments">
           {del.error && <div className="mb-3"><Alert tone="error">{del.error}</Alert></div>}

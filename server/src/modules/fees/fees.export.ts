@@ -3,7 +3,7 @@ import { AppError } from '../../utils/AppError';
 import { nairaText, toCsv } from '../../utils/csv';
 import * as fees from './fees.service';
 
-const CLASS_NAME = `c.stage || ' ' || c.year || coalesce(c.arm, '')`;
+const CLASS_NAME = `class_label(c.stage, c.year, c.arm)`;
 const fmt = (d: unknown) => (d ? new Date(d as string).toLocaleString('en-CA', { timeZone: 'Africa/Lagos', hour12: false }).replace(',', '') : '');
 
 export async function summaryCsv(termId: string) {

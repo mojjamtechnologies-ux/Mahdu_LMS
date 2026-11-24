@@ -99,7 +99,7 @@ const Q = (text: string, marks: number, correct: number) => ({ text, marks, opti
   // ---------- parents and teachers see results ----------
   const pr = (await call('GET', '/quizzes/parent', par.token)).data;
   check('the parent sees their child’s best score', [pr.length, pr[0].quizzes[0].best, pr[0].quizzes[0].maxScore], [1, 4, 4]);
-  check('the teacher sees both students’ best scores and an average', [(await call('GET', `/quizzes/teacher/${qid}`, tch.token)).data.results.map((r: any) => r.best).sort(), (await call('GET', '/quizzes/teacher', tch.token)).data[0].takers], [[1, 4], 2]);
+  check('the teacher sees both students’ best scores and an average', [(await call('GET', `/quizzes/teacher/${qid}`, tch.token)).data.results.map((r: any) => r.best).sort(), (await call('GET', '/quizzes/teacher', tch.token)).data.find((q: any) => q.id === qid).takers], [[1, 4], 2]);
 
   // ---------- closing ----------
   const open = await call('POST', '/quizzes/teacher', tch.token, { ...body, title: 'Closing quiz' }); await call('POST', `/quizzes/teacher/${open.data.id}/publish`, tch.token, {});

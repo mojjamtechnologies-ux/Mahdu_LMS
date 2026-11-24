@@ -25,7 +25,7 @@ export default function ClassSummary({
     <DataState loading={t.loading} error={t.error}>
       {!t.terms.length ? (
         <Card>
-          <Empty>The school has not set up its terms yet.</Empty>
+          <Empty>The school has not set up its semesters yet.</Empty>
         </Card>
       ) : (
         <>
@@ -42,7 +42,7 @@ export default function ClassSummary({
               ))}
             </Select>
             <Select
-              label="Term"
+              label="Semester"
               value={termId}
               onChange={(e) => setTermPick(e.target.value)}
             >

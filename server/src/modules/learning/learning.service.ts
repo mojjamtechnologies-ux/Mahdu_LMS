@@ -23,7 +23,7 @@ async function assertTeaches(db: Queryable, teacherId: string, classId: string, 
   if (!rowCount) throw new AppError(403, 'You are not assigned to teach this subject in this class.', 'FORBIDDEN');
 }
 
-const CLASS_NAME = `c.stage || ' ' || c.year || coalesce(c.arm, '')`;
+const CLASS_NAME = `class_label(c.stage, c.year, c.arm)`;
 
 // ---------------- lesson notes ----------------
 const noteSelect = `

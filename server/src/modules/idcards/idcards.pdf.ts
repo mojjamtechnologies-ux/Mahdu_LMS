@@ -384,3 +384,6 @@ export async function prepareCardsPdf(faces: CardFace[], layout: PdfLayout) {
     },
   };
 }
+
+const ARABIC_FONT = resolve(process.cwd(), "assets/fonts/NotoSansArabic-Regular.ttf");
+const ARABIC_FONT_BOLD = resolve(process.cwd(), "assets/fonts/NotoSansArabic-Bold.ttf");

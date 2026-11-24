@@ -7,10 +7,10 @@ set -euo pipefail
 : "${DATABASE_URL:?Set DATABASE_URL to the direct database connection string}"
 DIR="${1:-backups}"; KEEP="${2:-14}"
 mkdir -p "$DIR"
-FILE="$DIR/kok-$(date -u +%Y%m%d-%H%M%S).dump"
+FILE="$DIR/mrei-$(date -u +%Y%m%d-%H%M%S).dump"
 pg_dump --format=custom --no-owner --no-privileges --file="$FILE" "$DATABASE_URL"
 echo "Backup written: $FILE ($(du -h "$FILE" | cut -f1))"
 # Keep only the newest $KEEP backups in the folder.
-ls -1t "$DIR"/kok-*.dump | tail -n +"$((KEEP + 1))" | xargs -r rm -f
+ls -1t "$DIR"/mrei-*.dump | tail -n +"$((KEEP + 1))" | xargs -r rm -f
 echo "Verifying the file can be read..."
 pg_restore --list "$FILE" > /dev/null && echo "OK: the backup is a valid archive."

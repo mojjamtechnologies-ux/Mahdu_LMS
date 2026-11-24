@@ -2,9 +2,9 @@ import { pool, query, withTransaction, Queryable } from '../../db/pool';
 import { AppError } from '../../utils/AppError';
 import { audit } from '../../services/audit';
 import type { Role } from '../users/roles';
+import { termName } from '../../utils/academicNames';
 
-const TERM_NAMES = ['First Term', 'Second Term', 'Third Term'];
-const CLASS_NAME = `c.stage || ' ' || c.year || coalesce(c.arm, '')`;
+const CLASS_NAME = `class_label(c.stage, c.year, c.arm)`;
 type Ctx = { actorId: string; ip?: string };
 
 export async function assertRole(db: Queryable, userId: string, role: Role) {
@@ -53,7 +53,7 @@ export async function setCurrentSession(id: string, ctx: Ctx) {
 
 // ---------- terms ----------
 const termRow = (r: any) => ({
-  id: r.id, sessionId: r.session_id, termNumber: r.term_number, name: TERM_NAMES[r.term_number - 1],
+  id: r.id, sessionId: r.session_id, termNumber: r.term_number, name: termName(r.term_number),
   startDate: r.start_date, endDate: r.end_date, isCurrent: r.is_current,
 });
 

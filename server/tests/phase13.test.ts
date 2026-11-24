@@ -66,7 +66,7 @@ const lagosIsoDow = () => { const d = new Date().toLocaleDateString('en-US', { t
   }
 
   const st = (await call('GET', '/dashboard/student', s1.token)).data;
-  check('the student sees their class', st.className, `JSS 1${tag}`);
+  check('the student sees their class', st.className, `Ihdaady Awwal ${tag}`);
   if (dow <= 5) check('today’s lesson shows with the teacher’s name', [st.lessonsToday.length, st.lessonsToday[0].subject, typeof st.lessonsToday[0].teacher], [1, `Fam ${sfx}`, 'string']);
   check('assignments due list only visible, future work, and counts the missed one', [st.assignments.due.map((a: any) => a.title).sort(), st.assignments.overdueCount], [['Marked task', 'Open task'], 1]);
   check('unsubmitted work comes before work already handed in', st.assignments.due[0].title, 'Open task');
@@ -80,7 +80,7 @@ const lagosIsoDow = () => { const d = new Date().toLocaleDateString('en-US', { t
   const p = (await call('GET', '/dashboard/parent', par.token)).data;
   check('the parent sees both linked children, with names', p.children.map((c: any) => c.studentId).sort(), [s1.id, s2.id].sort());
   const c1 = p.children.find((c: any) => c.studentId === s1.id);
-  check('the parent sees the same overview for the enrolled child', [c1.className, c1.assignments.overdueCount], [`JSS 1${tag}`, 1]);
+  check('the parent sees the same overview for the enrolled child', [c1.className, c1.assignments.overdueCount], [`Ihdaady Awwal ${tag}`, 1]);
   if (term) check('the parent sees fees: total, paid and outstanding', [c1.fees.totalKobo, c1.fees.paidKobo, c1.fees.outstandingKobo], [5000000, 2000000, 3000000]);
   check('the second parent sees only their own child', (await call('GET', '/dashboard/parent', par2.token)).data.children.map((c: any) => c.studentId), [s2.id]);
   check('a parent with no linked child gets an empty list', (await call('GET', '/dashboard/parent', (await newUser(A, 'parent')).token)).data.children, []);

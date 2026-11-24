@@ -76,7 +76,7 @@ const day = (ahead: number) => new Date(Date.now() + ahead * 864e5).toLocaleDate
 
   // ---------- timetable views ----------
   const sv = await call('GET', '/students/me/timetable', stu1.token);
-  check('student sees their own class timetable', [sv.status, sv.data.entries.length, sv.data.className], [200, 2, `JSS 1${tag}`]);
+  check('student sees their own class timetable', [sv.status, sv.data.entries.length, sv.data.className], [200, 2, `Ihdaady Awwal ${tag}`]);
   check('another class student sees theirs, not the first', (await call('GET', '/students/me/timetable', stu3.token)).data.entries.map((e: any) => e.startTime), ['10:00']);
   check('parent sees a linked child timetable', (await call('GET', `/parents/me/children/${stu1.id}/timetable`, par.token)).data.entries.length, 2);
   check("parent cannot see another family's child", (await call('GET', `/parents/me/children/${stu1.id}/timetable`, par2.token)).status, 404);
@@ -138,18 +138,18 @@ const day = (ahead: number) => new Date(Date.now() + ahead * 864e5).toLocaleDate
   check('promoting into an earlier session is refused', (await call('POST', '/rollover/preview', A, { fromSessionId: ns.id, toSessionId: sess.id })).status, 400);
   const pv = await call('POST', '/rollover/preview', A, { ...base, createMissingClasses: false });
   const byName = (d: any, n: string) => d.classes.find((c: any) => c.fromClassName === n);
-  check('JSS 3 is blocked while SSS 1 does not exist', [pv.data.canRun, pv.data.blockers.length], [false, 1]);
-  check('JSS 1 goes to JSS 2, SSS 3 graduates', [byName(pv.data, `JSS 1${tag}`).target.className, byName(pv.data, `SSS 3${tag}`).target.graduate], [`JSS 2${tag}`, true]);
+  check('Ihdaady Thaalith is blocked while Ihdaady Raabih does not exist', [pv.data.canRun, pv.data.blockers.length], [false, 1]);
+  check('JSS 1 goes to Ihdaady Thaany, Thaanawiy Thaalith graduates', [byName(pv.data, `Ihdaady Awwal ${tag}`).target.className, byName(pv.data, `Thaanawiy Thaalith ${tag}`).target.graduate], [`Ihdaady Thaany ${tag}`, true]);
   check('refusing to run while blocked', (await call('POST', '/rollover/run', A, base)).status, 409);
   const withCreate = await call('POST', '/rollover/preview', A, { ...base, createMissingClasses: true });
-  check('missing classes can be created', [withCreate.data.canRun, withCreate.data.classesToCreate], [true, [`SSS 1${tag}`]]);
+  check('missing classes can be created', [withCreate.data.canRun, withCreate.data.classesToCreate], [true, [`Ihdaady Raabih ${tag}`]]);
   check('preview changes nothing', (await query('select count(*)::int n from enrolments where session_id = $1', [ns.id])).rows[0].n, 0);
   const run = await call('POST', '/rollover/run', A, { ...base, createMissingClasses: true, repeatStudentIds: [stu2.id], excludeStudentIds: [stu4.id], carryTimetable: true });
   check('promotion ran', [run.status, run.data.promoted, run.data.repeated, run.data.graduated, run.data.excluded], [200, 2, 1, 1, 1]);
   const cls = async (id: string) => (await call('GET', `/academic/enrolments?sessionId=${ns.id}`, A)).data.find((e: any) => e.studentId === id)?.className;
-  check('promoted, repeating, excluded and graduated students end up right', [await cls(stu1.id), await cls(stu2.id), await cls(stu3.id), await cls(stu4.id), await cls(stuG.id)], [`JSS 2${tag}`, `JSS 1${tag}`, `JSS 3${tag}`, undefined, undefined]);
+  check('promoted, repeating, excluded and graduated students end up right', [await cls(stu1.id), await cls(stu2.id), await cls(stu3.id), await cls(stu4.id), await cls(stuG.id)], [`Ihdaady Thaany ${tag}`, `Ihdaady Awwal ${tag}`, `Ihdaady Thaalith ${tag}`, undefined, undefined]);
   check('final year is marked graduated in the old session', (await call('GET', `/academic/enrolments?sessionId=${sess.id}`, A)).data.find((e: any) => e.studentId === stuG.id).status, 'graduated');
-  check('old session history is otherwise untouched', (await call('GET', `/academic/enrolments?sessionId=${sess.id}`, A)).data.find((e: any) => e.studentId === stu1.id).className, `JSS 1${tag}`);
+  check('old session history is otherwise untouched', (await call('GET', `/academic/enrolments?sessionId=${sess.id}`, A)).data.find((e: any) => e.studentId === stu1.id).className, `Ihdaady Awwal ${tag}`);
   check('form teacher and teaching assignments carried over', [run.data.formTeachersCarried, run.data.assignmentsCarried >= 4], [1, true]);
   check('timetable carried over', run.data.timetableSlotsCarried > 0, true);
   check('running it twice is refused', (await call('POST', '/rollover/run', A, { ...base, createMissingClasses: true })).error?.code, 'ALREADY_DONE');

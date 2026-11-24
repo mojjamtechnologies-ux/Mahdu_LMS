@@ -20,8 +20,8 @@ async function user(A: string, role: string, email: string, extra: object = {}) 
   const e = await call('POST', '/academic/subjects', A, { name: 'English Language' });
   for (const c of [c1, c2]) await call('PUT', `/academic/classes/${c.id}/subjects`, A, { subjectIds: [m.id, e.id] });
   const t = await user(A, 'teacher', 'teacher@demo.test', { staffNumber: 'STF-01' });
-  const s1 = await user(A, 'student', 'student1@demo.test', { admissionNumber: 'KOK-001' });
-  const s2 = await user(A, 'student', 'student2@demo.test', { admissionNumber: 'KOK-002' });
+  const s1 = await user(A, 'student', 'student1@demo.test', { admissionNumber: 'MREI-001' });
+  const s2 = await user(A, 'student', 'student2@demo.test', { admissionNumber: 'MREI-002' });
   const par = await user(A, 'parent', 'parent@demo.test');
   await call('POST', '/academic/enrolments', A, { studentId: s1, classId: c1.id, sessionId: s.id });
   await call('POST', '/parent-links', A, { parentId: par, studentId: s1, relationship: 'mother', isPrimary: true });

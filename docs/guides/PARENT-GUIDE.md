@@ -10,7 +10,7 @@ The school sends you an email with an activation link. Open it and choose your p
 - **Assignments**: titles, deadlines and whether your child has handed in the work.
 - **Timetable** and **Examinations**.
 - **Attendance**: present, late and absent days, and you can send an **explanation** for an absence.
-- **Results**: report cards once the school has published them, and **progress over time** (each term, and the yearly result, which is marked provisional until all three terms are published).
+- **Results**: report cards once the school has published them, and **progress over time** (each semester, and the yearly result, which is marked provisional until both semesters are published).
 - **Quizzes** set for your child and the best score.
 
 ## School fees

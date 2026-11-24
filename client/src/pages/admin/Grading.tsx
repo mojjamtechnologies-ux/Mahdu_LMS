@@ -66,7 +66,7 @@ function Columns() {
   async function create() { if (await add.run(() => api('/results/components', { body: { sessionId: sid, name: f.name, kind: f.kind, maxScore: Number(f.maxScore) } }))) { setF({ name: '', kind: 'ca', maxScore: '' }); cols.reload(); } }
   return (
     <Card title="Assessment columns">
-      <p className="mb-4 text-sm text-muted">These are the columns teachers fill in for every subject, for example two tests and an exam. Every term in a session uses the same columns.</p>
+      <p className="mb-4 text-sm text-muted">These are the columns teachers fill in for every subject, for example two tests and an exam. Every semester in a session uses the same columns.</p>
       <div className="max-w-xs"><Select label="Session" value={sid} onChange={(e) => setPicked(e.target.value)}>{sessions.data?.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</Select></div>
       <div className="mt-4">
         <DataState loading={cols.loading && !cols.data} error={cols.error}>

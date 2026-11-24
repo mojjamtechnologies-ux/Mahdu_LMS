@@ -6,7 +6,7 @@ import { assertRole } from '../academic/academic.service';
 import type { Role } from '../users/roles';
 
 type Actor = { id: string; role: Role; ip?: string };
-const CLASS_NAME = `c.stage || ' ' || c.year || coalesce(c.arm, '')`;
+const CLASS_NAME = `class_label(c.stage, c.year, c.arm)`;
 const EDIT_WINDOW_DAYS = 7; // a form teacher can correct a register for a week; after that only the administrator can
 const notFound = (w: string) => new AppError(404, `${w} not found`, 'NOT_FOUND');
 export const lagosToday = () => new Date().toLocaleDateString('en-CA', { timeZone: 'Africa/Lagos' });
@@ -30,7 +30,7 @@ export async function listFormTeachers(sessionId: string) {
   const { rows } = await query(
     `select c.id as class_id, ${CLASS_NAME} as class_name, f.teacher_id, u.first_name, u.last_name
        from classes c left join class_form_teachers f on f.class_id = c.id and f.session_id = $1 left join users u on u.id = f.teacher_id
-      order by c.stage desc, c.year, c.arm nulls first`, [sessionId]);
+      order by c.stage, c.year, c.arm nulls first`, [sessionId]);
   return rows.map((r) => ({ classId: r.class_id, className: r.class_name, teacherId: r.teacher_id, teacherName: r.teacher_id ? `${r.first_name} ${r.last_name}` : null }));
 }
 export async function setFormTeacher(i: { classId: string; sessionId: string; teacherId: string | null }, actor: Actor) {
@@ -152,7 +152,7 @@ export async function dayStatus(date: string) {
             (select count(*) from attendance_records a where a.register_id = r.id and a.status = 'absent')::int as absent
        from classes c left join class_form_teachers f on f.class_id = c.id and f.session_id = $2 left join users u on u.id = f.teacher_id
        left join attendance_registers r on r.class_id = c.id and r.date = $1
-      where exists (select 1 from enrolments e where e.class_id = c.id and e.session_id = $2 and e.status = 'active') order by c.stage desc, c.year, c.arm nulls first`, [date, term.sessionId]);
+      where exists (select 1 from enrolments e where e.class_id = c.id and e.session_id = $2 and e.status = 'active') order by c.stage, c.year, c.arm nulls first`, [date, term.sessionId]);
   return rows.map((r) => ({ classId: r.id, className: r.name, formTeacher: r.first_name ? `${r.first_name} ${r.last_name}` : null, taken: !!r.reg, present: r.present, late: r.late, absent: r.absent }));
 }
 

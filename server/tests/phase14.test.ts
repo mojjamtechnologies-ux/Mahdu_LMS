@@ -33,7 +33,7 @@ async function newUser(adminT: string, role: string, extra: Record<string, strin
   const y = 2100 + (parseInt(sfx, 36) % 800);
   const sess = (await call('POST', '/academic/sessions', A, { name: `${y}/${y + 1}`, startDate: '2100-01-01', endDate: '2100-12-31' })).data;
   let terms = (await query('select id, term_number from terms where session_id = $1 order by term_number', [sess.id])).rows;
-  for (let n = terms.length + 1; n <= 3; n++) await query('insert into terms (session_id, term_number, start_date, end_date) values ($1,$2,$3,$4)', [sess.id, n, `2100-0${n * 3 - 2}-01`, `2100-0${n * 3 - 1}-28`]);
+  for (let n = terms.length + 1; n <= 2; n++) await query('insert into terms (session_id, term_number, start_date, end_date) values ($1,$2,$3,$4)', [sess.id, n, `2100-0${n * 3 - 2}-01`, `2100-0${n * 3 - 1}-28`]);
   terms = (await query('select id, term_number from terms where session_id = $1 order by term_number', [sess.id])).rows;
   const tag = 'R' + sfx.slice(-3).toUpperCase().replace(/[^A-Z0-9]/g, 'X');
   const cls = (await call('POST', '/academic/classes', A, { stage: 'JSS', year: 2, arm: tag })).data;
@@ -44,25 +44,29 @@ async function newUser(adminT: string, role: string, extra: Record<string, strin
   const ca = (await query(`insert into assessment_components (session_id, name, kind, max_score, sort_order) values ($1,'CA','ca',40,1) returning id`, [sess.id])).rows[0].id;
   const ex = (await query(`insert into assessment_components (session_id, name, kind, max_score, sort_order) values ($1,'Exam','exam',60,2) returning id`, [sess.id])).rows[0].id;
   const put = (term: string, subj: string, comp: string, score: number) => query('insert into scores (student_id, subject_id, term_id, component_id, score) values ($1,$2,$3,$4,$5)', [stu.id, subj, term, comp, score]);
-  const [t1, t2, t3] = terms.map((t: any) => t.id as string);
-  // Term 1: Maths 30+50=80, English 20+20=40.  Term 2: Maths 20+30=50, English has CA only (incomplete).  Term 3: scores exist but are NOT published.
+  const [t1, t2] = terms.map((t: any) => t.id as string);
+  // Semester 1: Maths 30+50=80, English 20+20=40.  Semester 2: Maths 20+30=50, English has CA only (incomplete). Semester 2 is published only after the first round of checks.
   await put(t1, maths.id, ca, 30); await put(t1, maths.id, ex, 50); await put(t1, eng.id, ca, 20); await put(t1, eng.id, ex, 20);
   await put(t2, maths.id, ca, 20); await put(t2, maths.id, ex, 30); await put(t2, eng.id, ca, 30);
-  await put(t3, maths.id, ca, 40); await put(t3, maths.id, ex, 60); await put(t3, eng.id, ca, 40); await put(t3, eng.id, ex, 60);
   const bands = JSON.stringify([{ minPercent: 70, grade: 'A', remark: 'Excellent' }, { minPercent: 50, grade: 'C', remark: 'Credit' }, { minPercent: 0, grade: 'F', remark: 'Fail' }]);
-  for (const t of [t1, t2]) await query('insert into result_publications (term_id, class_id, grading) values ($1,$2,$3::jsonb)', [t, cls.id, bands]);
+  for (const t of [t1]) await query('insert into result_publications (term_id, class_id, grading) values ($1,$2,$3::jsonb)', [t, cls.id, bands]);
 
   const h = (await call('GET', '/results-history/me', stu.token)).data;
-  check('only the two published terms appear, oldest first', h.terms.map((t: any) => t.termNumber), [1, 2]);
+  check('only the published semester appears', h.terms.map((t: any) => t.termNumber), [1]);
   const m = (t: any, name: string) => t.subjects.find((s: any) => s.name === name);
   check('term 1: subject percentages and grades from the frozen scale', [m(h.terms[0], `RMaths ${sfx}`).percent, m(h.terms[0], `RMaths ${sfx}`).grade, m(h.terms[0], `REng ${sfx}`).percent, m(h.terms[0], `REng ${sfx}`).grade], [80, 'A', 40, 'F']);
   check('term 1 average is 60, grade C', [h.terms[0].average, h.terms[0].grade], [60, 'C']);
-  check('term 2: the incomplete subject is flagged and left out of the average', [m(h.terms[1], `REng ${sfx}`).complete, h.terms[1].incompleteSubjects, h.terms[1].average], [false, [`REng ${sfx}`], 50]);
-  check('the unpublished third term is never shown', JSON.stringify(h).includes('"termNumber":3'), false);
+  check('the unpublished second semester is never shown', JSON.stringify(h).includes('"termNumber":2'), false);
+  check('one of two semesters published: the yearly result is provisional', [h.years[0].provisional, h.years[0].termsPublished], [true, 1]);
 
-  const yr = h.years[0];
-  check('yearly result: subject averages over complete published terms', [yr.subjects.find((s: any) => s.name === `RMaths ${sfx}`).percent, yr.subjects.find((s: any) => s.name === `REng ${sfx}`).percent, yr.subjects.find((s: any) => s.name === `REng ${sfx}`).termsCounted], [65, 40, 1]);
-  check('yearly average 52.5, grade C, and marked provisional (2 of 3 terms)', [yr.average, yr.grade, yr.provisional, yr.termsPublished], [52.5, 'C', true, 2]);
+  // Now publish the second semester.
+  await query('insert into result_publications (term_id, class_id, grading) values ($1,$2,$3::jsonb)', [t2, cls.id, bands]);
+  const h2 = (await call('GET', '/results-history/me', stu.token)).data;
+  check('both semesters now appear, oldest first', h2.terms.map((t: any) => t.termNumber), [1, 2]);
+  check('semester 2: the incomplete subject is flagged and left out of the average', [m(h2.terms[1], `REng ${sfx}`).complete, h2.terms[1].incompleteSubjects, h2.terms[1].average], [false, [`REng ${sfx}`], 50]);
+  const yr = h2.years[0];
+  check('yearly result: subject averages over complete published semesters', [yr.subjects.find((s: any) => s.name === `RMaths ${sfx}`).percent, yr.subjects.find((s: any) => s.name === `REng ${sfx}`).percent, yr.subjects.find((s: any) => s.name === `REng ${sfx}`).termsCounted], [65, 40, 1]);
+  check('yearly average 52.5, grade C, and final (2 of 2 semesters)', [yr.average, yr.grade, yr.provisional, yr.termsPublished], [52.5, 'C', false, 2]);
 
   // The grades above come from the scale stored with each publication (A/C/F here), not from the school's live grade_bands table.
 

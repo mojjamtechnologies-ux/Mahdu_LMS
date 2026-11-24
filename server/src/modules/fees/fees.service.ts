@@ -3,11 +3,11 @@ import { AppError } from '../../utils/AppError';
 import { naira } from '../../utils/money';
 import { audit } from '../../services/audit';
 import { assertRole } from '../academic/academic.service';
+import { termName } from '../../utils/academicNames';
 
 type Ctx = { actorId: string; ip?: string };
 const notFound = (w: string) => new AppError(404, `${w} not found`, 'NOT_FOUND');
-const CLASS_NAME = `c.stage || ' ' || c.year || coalesce(c.arm, '')`;
-export const TERM_NAMES = ['First Term', 'Second Term', 'Third Term'];
+const CLASS_NAME = `class_label(c.stage, c.year, c.arm)`;
 
 // ---------------- categories and schedule ----------------
 const catRow = (r: any) => ({ id: r.id, name: r.name, description: r.description, active: r.active });
@@ -71,7 +71,7 @@ export const invoiceRow = (r: any) => {
   const status = invoiceStatus(r);
   return {
     id: r.id, number: r.number, studentId: r.student_id, studentName: `${r.first_name} ${r.last_name}`, admissionNumber: r.admission_number,
-    classId: r.class_id, className: r.class_name, termId: r.term_id, termName: TERM_NAMES[r.term_number - 1], sessionName: r.session_name,
+    classId: r.class_id, className: r.class_name, termId: r.term_id, termName: termName(r.term_number), sessionName: r.session_name,
     dueDate: r.due_date, status, totalKobo: r.total_kobo, paidKobo: r.paid_kobo, balanceKobo: status === 'cancelled' ? 0 : Math.max(0, balance),
     overdue: status !== 'paid' && status !== 'cancelled' && !!r.due_date && r.due_date < new Date().toISOString().slice(0, 10),
     cancelReason: r.cancel_reason,
@@ -231,7 +231,7 @@ export async function getReceipt(paymentId: string) {
   return {
     id: p.id, receiptNumber: p.receipt_number, invoiceId: p.invoice_id, invoiceNumber: p.invoice_number, studentId: p.student_id,
     studentName: `${p.first_name} ${p.last_name}`, admissionNumber: p.admission_number, className: p.class_name,
-    termName: TERM_NAMES[p.term_number - 1], sessionName: p.session_name, amountKobo: p.amount_kobo, method: p.method, reference: p.reference,
+    termName: termName(p.term_number), sessionName: p.session_name, amountKobo: p.amount_kobo, method: p.method, reference: p.reference,
     paidAt: p.paid_at, reversed: !!p.reversed_at, balanceKobo: Math.max(0, t.total - t.paid), invoiceTotalKobo: t.total,
   };
 }
@@ -246,11 +246,11 @@ export async function report(termId: string) {
             count(*) filter (where x.total_kobo - x.paid_kobo > 0)::int as owing,
             count(*) filter (where x.total_kobo - x.paid_kobo > 0 and x.due_date < current_date)::int as overdue
        from (select i.class_id, i.due_date, ${TOTALS} from invoices i where i.term_id = $1 and i.status = 'open') x
-       join classes c on c.id = x.class_id group by c.id order by c.stage desc, c.year, c.arm nulls first`, [termId]);
+       join classes c on c.id = x.class_id group by c.id order by c.stage, c.year, c.arm nulls first`, [termId]);
   const byClass = rows.map((r) => ({ classId: r.class_id, className: r.class_name, invoices: r.invoices, billedKobo: r.billed, collectedKobo: r.collected, outstandingKobo: Math.max(0, r.billed - r.collected), studentsOwing: r.owing, studentsOverdue: r.overdue }));
   const sum = (k: 'billedKobo' | 'collectedKobo') => byClass.reduce((s, r) => s + r[k], 0);
   return {
-    term: `${term.name} ${TERM_NAMES[term.term_number - 1]}`,
+    term: `${term.name} ${termName(term.term_number)}`,
     billedKobo: sum('billedKobo'), collectedKobo: sum('collectedKobo'), outstandingKobo: byClass.reduce((s, r) => s + r.outstandingKobo, 0),
     invoices: byClass.reduce((s, r) => s + r.invoices, 0), studentsOwing: byClass.reduce((s, r) => s + r.studentsOwing, 0),
     studentsOverdue: byClass.reduce((s, r) => s + r.studentsOverdue, 0), byClass,

@@ -6,7 +6,8 @@ import { fmtLagos } from "../../utils/dates";
 import { audit } from "../../services/audit";
 import { sendMail } from "../../services/mailer";
 import { notifyOne, safely } from "../notifications/notifications.service";
-import { invoiceRow, invoiceSelect, TERM_NAMES } from "./fees.service";
+import { invoiceRow, invoiceSelect } from "./fees.service";
+import { termName } from '../../utils/academicNames';
 
 type Parent = { id: string; email: string; first_name: string };
 
@@ -153,7 +154,7 @@ export const notifyPaymentReceived = (paymentId: string) =>
       )
     ).rows[0].b as number;
     const title = `Payment received: ${p.first_name} ${p.last_name}`;
-    const body = `${naira(p.amount_kobo)} was received for ${p.first_name}'s ${p.session_name} ${TERM_NAMES[p.term_number - 1]} fees. Receipt ${p.receipt_number}. ${bal > 0 ? `Balance remaining: ${naira(bal)}.` : "The invoice is now fully paid."}`;
+    const body = `${naira(p.amount_kobo)} was received for ${p.first_name}'s ${p.session_name} ${termName(p.term_number)} fees. Receipt ${p.receipt_number}. ${bal > 0 ? `Balance remaining: ${naira(bal)}.` : "The invoice is now fully paid."}`;
     for (const g of await guardiansOf(p.student_id)) {
       const id = await notifyOne(pool, g.id, {
         type: "payment_received",

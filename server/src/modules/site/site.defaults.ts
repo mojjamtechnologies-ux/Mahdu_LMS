@@ -1,7 +1,7 @@
 import { SCHOOL } from '../../config/school';
 
 // Anything the school has not told us yet is a clearly labelled placeholder. Nothing here is invented:
-// the only real facts are the school's name, address, and that it runs JSS 1-3 and SSS 1-3.
+// the only real facts are the school's name, address, and that it runs Ihdaady Awwal to Raabih and Thaanawiy Awwal to Thaalith.
 export const PLACEHOLDER = '[Placeholder]';
 const ph = (what: string) => `${PLACEHOLDER} ${what}`;
 
@@ -33,7 +33,7 @@ export const DEFAULTS = {
     leadership: [{ name: ph('Name'), role: ph('Role, for example Principal'), bio: ph('Add a short biography.') }],
   },
   academics: {
-    intro: `${SCHOOL.name} teaches Junior Secondary School (JSS 1 to 3) and Senior Secondary School (SSS 1 to 3).`,
+    intro: `${SCHOOL.name} teaches Ihdaady (Ihdaady Awwal to Ihdaady Raabih) and Thaanawiy (Thaanawiy Awwal to Thaanawiy Thaalith).`,
     curriculum: ph('Describe the curriculum the school follows.'),
     programmes: ph('Describe academic programmes, clubs or extra support.'),
   },

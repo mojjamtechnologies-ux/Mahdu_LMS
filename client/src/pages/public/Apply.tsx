@@ -6,6 +6,7 @@ import { api } from "../../lib/api";
 import { usePageTitle } from "../../lib/usePageTitle";
 import { useAction } from "../../lib/useFetch";
 import { useTranslation } from "react-i18next";
+import { CLASS_LEVELS } from "../../lib/classLevels";
 
 const EMPTY = {
   firstName: "",
@@ -21,7 +22,6 @@ const EMPTY = {
   consent: false,
   website: "",
 };
-const CLASSES = ["JSS|1", "JSS|2", "JSS|3", "SSS|1", "SSS|2", "SSS|3"];
 
 // A short form that asks only for what the school needs to consider the application.
 export default function Apply() {
@@ -133,9 +133,9 @@ export default function Apply() {
             error={er.classStage ?? er.classYear}
             onChange={(e) => set("klass", e.target.value)}
           >
-            {CLASSES.map((c) => (
-              <option key={c} value={c}>
-                {c.replace("|", " ")}
+            {CLASS_LEVELS.map((c) => (
+              <option key={c.value} value={c.value}>
+                {c.name}
               </option>
             ))}
           </Select>

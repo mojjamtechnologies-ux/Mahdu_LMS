@@ -64,7 +64,7 @@ create index gallery_images_file_idx on gallery_images (file_id);
 create sequence application_number_seq;
 create table admission_applications (
   id              uuid primary key default gen_random_uuid(),
-  reference       text not null unique default ('KOK-APP-' || lpad(nextval('application_number_seq')::text, 6, '0')),
+  reference       text not null unique default ('MREI-APP-' || lpad(nextval('application_number_seq')::text, 6, '0')),
   first_name      text not null,
   last_name       text not null,
   date_of_birth   date not null,

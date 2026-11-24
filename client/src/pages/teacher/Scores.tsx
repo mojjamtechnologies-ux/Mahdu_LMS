@@ -44,7 +44,7 @@ export default function Scores() {
         <>
           <div className="mb-6 grid gap-4 sm:max-w-2xl sm:grid-cols-2">
             <Select label="Class and subject" value={pairId} onChange={(e) => { setPair(e.target.value); setMsg(''); setErrors([]); }}>{mine.data?.map((a) => <option key={a.id} value={`${a.classId}|${a.subjectId}`}>{a.className} · {a.subjectName}</option>)}</Select>
-            <Select label="Term" value={tid} onChange={(e) => { setTermPick(e.target.value); setMsg(''); setErrors([]); }}>{terms.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}</Select>
+            <Select label="Semester" value={tid} onChange={(e) => { setTermPick(e.target.value); setMsg(''); setErrors([]); }}>{terms.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}</Select>
           </div>
           <DataState loading={sheet.loading && !s} error={sheet.error}>
             {s && (

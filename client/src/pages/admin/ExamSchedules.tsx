@@ -86,15 +86,15 @@ export default function ExamSchedules() {
   }
   return (
     <>
-      <PageHeader title="Exam schedules" intro="Build the examination timetable for a term as a draft, then publish it. Nothing is visible to students, parents or teachers until you publish." />
+      <PageHeader title="Exam schedules" intro="Build the examination timetable for a semester as a draft, then publish it. Nothing is visible to students, parents or teachers until you publish." />
       <div className="grid gap-6 lg:grid-cols-[22rem_1fr]">
         <div className="space-y-6">
           <Card title="New schedule">
             <form onSubmit={create} className="space-y-4">
               <DataState loading={termsLoading} error={termsError}>
-                <Select label="Term" value={termId || defaultId} onChange={(e) => setTermId(e.target.value)}>{terms.map((t) => <option key={t.id} value={t.id}>{label(t)}</option>)}</Select>
+                <Select label="Semester" value={termId || defaultId} onChange={(e) => setTermId(e.target.value)}>{terms.map((t) => <option key={t.id} value={t.id}>{label(t)}</option>)}</Select>
               </DataState>
-              <Field label="Title" value={title} maxLength={120} placeholder="First term examinations" onChange={(e) => setTitle(e.target.value)} required />
+              <Field label="Title" value={title} maxLength={120} placeholder="First semester examinations" onChange={(e) => setTitle(e.target.value)} required />
               {act.error && <Alert tone="error">{act.error}</Alert>}
               <Button loading={act.busy} disabled={!terms.length}>Create draft</Button>
             </form>

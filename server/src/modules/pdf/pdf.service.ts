@@ -89,10 +89,13 @@ async function invoiceFacts(invoiceId: string) {
   } catch {
     /* instalment plans not installed */
   }
-  const total = lines.reduce((n, l) => n + Number(l.amount_kobo), 0);
+  const total = lines.reduce(
+    (n: number, l: any) => n + Number(l.amount_kobo),
+    0,
+  );
   const paid = payments
-    .filter((p) => !p.reversed_at)
-    .reduce((n, p) => n + Number(p.amount_kobo), 0);
+    .filter((p: any) => !p.reversed_at)
+    .reduce((n: number, p: any) => n + Number(p.amount_kobo), 0);
   return {
     ...i,
     lines,
@@ -281,7 +284,7 @@ export async function prepareStatement(viewer: Viewer, invoiceId: string) {
           { label: "Amount", width: 140, align: "right" },
         ],
         [
-          ...d.lines.map((l) => [
+          ...d.lines.map((l: any) => [
             `${l.description}${l.kind === "discount" ? " (discount)" : l.kind === "charge" ? " (extra charge)" : ""}${l.reason ? `\n${l.reason}` : ""}`,
             `${Number(l.amount_kobo) < 0 ? "-" : ""}${money(Math.abs(Number(l.amount_kobo)))}`,
           ]),
@@ -312,13 +315,13 @@ export async function prepareStatement(viewer: Viewer, invoiceId: string) {
             { label: "How", width: 140 },
             { label: "Amount", width: 145, align: "right" },
           ],
-          d.payments.map((p) => [
+          d.payments.map((p: any) => [
             lagos(p.paid_at),
             p.receipt_number,
             `${METHOD[p.method] ?? p.method}${p.reversed_at ? " (reversed)" : ""}`,
             money(Number(p.amount_kobo)),
           ]),
-          { muted: d.payments.map((p) => !!p.reversed_at) },
+          { muted: d.payments.map((p: any) => !!p.reversed_at) },
         );
 
       doc.moveDown(0.5);
@@ -329,7 +332,10 @@ export async function prepareStatement(viewer: Viewer, invoiceId: string) {
       ]);
 
       if (d.plan.length) {
-        const planSum = d.plan.reduce((n, p) => n + Number(p.amount_kobo), 0);
+        const planSum = d.plan.reduce(
+          (n: number, p: any) => n + Number(p.amount_kobo),
+          0,
+        );
         let left = d.paid;
         doc
           .moveDown(0.3)
@@ -346,7 +352,7 @@ export async function prepareStatement(viewer: Viewer, invoiceId: string) {
             { label: "Amount", width: 150, align: "right" },
             { label: "Status", width: 175, align: "right" },
           ],
-          d.plan.map((p) => {
+          d.plan.map((p: any) => {
             const a = Number(p.amount_kobo);
             const paid = Math.min(left, a);
             left -= paid;

@@ -88,7 +88,7 @@ const day = (ahead: number) => new Date(Date.now() + ahead * 864e5).toLocaleDate
 
   // ---------- office threads ----------
   const off = await call('POST', '/messages/threads', par.token, { studentId: stu.id, recipientId: null, subject: 'Fees question', body: 'When is the deadline?' });
-  check('a parent writes to the school office; every administrator is notified', [off.status, (await query("select count(*)::int n from notifications where entity_id = $1 and user_id = (select id from users where role = 'admin' limit 1)", [off.data.id])).rows[0].n], [201, 1]);
+  check('a parent writes to the school office; every administrator is notified', [off.status, (await query("select count(*)::int n from notifications where entity_id = $1 and user_id = (select id from users where email = lower($2))", [off.data.id, process.env.ADMIN_EMAIL])).rows[0].n], [201, 1]);
   check('the office thread is in the administrator’s inbox but not in a teacher’s', [
     (await call('GET', '/messages/threads', A)).data.items.some((t: any) => t.id === off.data.id), (await call('GET', '/messages/threads', tMaths.token)).data.items.some((t: any) => t.id === off.data.id)], [true, false]);
   check('an administrator replies to the office thread', (await call('POST', `/messages/threads/${off.data.id}/messages`, A, { body: 'Friday.' })).status, 201);

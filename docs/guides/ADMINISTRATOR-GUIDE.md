@@ -3,8 +3,8 @@
 Menu names below are the ones in the left-hand menu. If a name is missing from your menu, ask your developer to add it.
 
 ## First-time set-up (do these in this order, once)
-1. **Sessions and terms**: create the school year (for example 2026/2027) with its three terms and their dates. Mark the current session and term.
-2. **Classes and subjects**: create the classes (JSS 1A, JSS 1B…) and the subjects, then say which subjects each class takes.
+1. **Sessions and semesters**: create the school year (for example 2026/2027) with its two semesters and their dates. Mark the current session and term.
+2. **Classes and subjects**: create the classes (Ihdaady Awwal A, Ihdaady Awwal B…) and the subjects, then say which subjects each class takes.
 3. **Grading and assessment**: confirm the grade scale and the score columns (for example CA 1, CA 2, Exam) with the school's leadership. Change nothing after scores are entered without asking your developer.
 4. **Fee setup**: enter the fees for each class and term, and any standing discounts.
 5. **Accounts**: create the teachers, students and parents. Each person gets an activation link to set their own password. For many students at once use **Import students** (upload a CSV, run the **dry run** first, fix any lines it lists, then import).

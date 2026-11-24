@@ -51,9 +51,10 @@ export default function PortalLayout({
       <header className="flex items-center justify-between gap-2 border-b-4 border-gold-400 bg-brand-500 px-4 py-3 text-white lg:hidden">
         <NavLink
           to="/"
-          className="min-w-0 font-display text-base font-bold leading-tight"
+          className="shrink-0 rounded-md"
+          aria-label={t("public.backToWebsite")}
         >
-          ← {t("public.backToWebsite")}
+          <Logo size={40} showName={false} />
         </NavLink>
         <div className="flex shrink-0 items-center gap-2">
           <PreferenceControls variant="compact" onDark />

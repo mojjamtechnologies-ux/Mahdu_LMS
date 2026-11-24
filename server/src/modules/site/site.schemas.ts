@@ -64,11 +64,11 @@ export const applySchema = z.object({
     const age = (Date.now() - new Date(d).getTime()) / (365.25 * 864e5);
     return age >= 5 && age <= 25;
   }, 'Check the date of birth'),
-  classStage: z.enum(['JSS', 'SSS']), classYear: z.number().int().min(1).max(3),
+  classStage: z.enum(['JSS', 'SSS']), classYear: z.number().int().min(1).max(4),
   previousSchool: t(200).optional(), guardianName: t(120).min(2, 'Enter the guardian\'s name'), guardianPhone: phone, guardianEmail: email,
   address: t(300).optional(), message: t(2000).optional(), consent, website: honeypot,
-});
-export const statusLookupSchema = z.object({ reference: z.string().trim().toUpperCase().regex(/^KOK-APP-\d{6}$/, 'Enter the reference from your confirmation, like KOK-APP-000123'), email });
+}).refine((b) => b.classYear <= (b.classStage === 'JSS' ? 4 : 3), { message: 'Thaanawiy has three years (Awwal, Thaaniy, Thaalith)', path: ['classYear'] });
+export const statusLookupSchema = z.object({ reference: z.string().trim().toUpperCase().regex(/^(MREI|KOK)-APP-\d{6}$/, 'Enter the reference from your confirmation, like KOK-APP-000123'), email });
 export const contactSchema = z.object({
   name: t(120).min(2, 'Enter your name'), email, phone: phone.optional().or(z.literal('').transform(() => undefined)),
   subject: t(150).min(3, 'Enter a subject'), message: t(3000).min(10, 'Write a little more'), consent, website: honeypot,

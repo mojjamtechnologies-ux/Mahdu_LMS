@@ -57,7 +57,7 @@ function Trend({ terms }: { terms: HTerm[] }) {
       viewBox={`0 0 ${W} ${H}`}
       className="w-full max-w-xl"
       role="img"
-      aria-label={`Average by term: ${pts.map((t) => `${t.sessionName} term ${t.termNumber} ${t.average}%`).join(", ")}`}
+      aria-label={`Average by semester: ${pts.map((t) => `${t.sessionName} semester ${t.termNumber} ${t.average}%`).join(", ")}`}
     >
       {[0, 50, 100].map((g) => (
         <g key={g}>
@@ -103,7 +103,7 @@ function Trend({ terms }: { terms: HTerm[] }) {
             fill="currentColor"
             opacity="0.7"
           >
-            T{t.termNumber}
+            S{t.termNumber}
           </text>
         </g>
       ))}
@@ -123,7 +123,7 @@ export default function ResultsHistoryView({ data }: { data: HistoryData }) {
     );
   const termKeys = data.terms.map((t) => ({
     id: t.termId,
-    label: `${t.sessionName.split("/")[0]} T${t.termNumber}`,
+    label: `${t.sessionName.split("/")[0]} S${t.termNumber}`,
   }));
   const subjectNames = [
     ...new Set(data.terms.flatMap((t) => t.subjects.map((s) => s.name))),
@@ -132,15 +132,15 @@ export default function ResultsHistoryView({ data }: { data: HistoryData }) {
     t.subjects.find((s) => s.name === name);
   return (
     <div className="space-y-6">
-      <Card title="Average by term">
+      <Card title="Average by semester">
         <Trend terms={data.terms} />
       </Card>
 
-      <Card title="Subjects across terms">
+      <Card title="Subjects across semesters">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <caption className="sr-only">
-              Percentage and grade for each subject in each published term
+              Percentage and grade for each subject in each published semester
             </caption>
             <thead>
               <tr>
@@ -216,7 +216,7 @@ export default function ResultsHistoryView({ data }: { data: HistoryData }) {
             {y.grade && <Badge tone="good">{y.grade}</Badge>}
             {y.provisional && (
               <Badge tone="warn">
-                Provisional: {y.termsPublished} of 3 terms published
+                Provisional: {y.termsPublished} of 2 semesters published
               </Badge>
             )}
           </div>
@@ -232,7 +232,7 @@ export default function ResultsHistoryView({ data }: { data: HistoryData }) {
                   <span className="text-muted">
                     {s.grade}
                     {s.termsCounted < y.termsPublished
-                      ? ` · ${s.termsCounted} term${s.termsCounted === 1 ? "" : "s"}`
+                      ? ` · ${s.termsCounted} semester${s.termsCounted === 1 ? "" : "s"}`
                       : ""}
                   </span>
                 </span>
@@ -241,7 +241,7 @@ export default function ResultsHistoryView({ data }: { data: HistoryData }) {
           </ul>
           <p className="mt-2 text-xs text-muted">
             Each subject is the average of its percentages over the published
-            terms where all scores were entered.
+            semesters where all scores were entered.
           </p>
         </Card>
       ))}

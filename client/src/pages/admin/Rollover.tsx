@@ -38,7 +38,7 @@ export default function Rollover() {
 
   return (
     <>
-      <PageHeader title="New session promotion" intro="Move students up to the next class at the start of a new session. Create the new session and its terms first, then preview, check, and run. Nothing changes until you press Run." />
+      <PageHeader title="New session promotion" intro="Move students up to the next class at the start of a new session. Create the new session and its semesters first, then preview, check, and run. Nothing changes until you press Run." />
       <div className="space-y-6">
         <Card title="1. Choose the sessions">
           <div className="grid max-w-2xl gap-4 sm:grid-cols-2">
@@ -46,7 +46,7 @@ export default function Rollover() {
             <Select label="Promote into" value={toId} onChange={(e) => { setTo(e.target.value); setPreview(null); }}><option value="">Choose…</option>{ordered.filter((s) => s.id !== fromId).map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</Select>
           </div>
           <div className="mt-4 space-y-2">
-            {check('Create missing classes (for example SSS 1 when moving up from JSS 3)', create, setCreate)}
+            {check('Create missing classes (for example Thaanawiy Awwal when moving up from Ihdaady Raabih)', create, setCreate)}
             {check('Carry over form teachers (same class, active teachers only)', carryForm, setCarryForm)}
             {check('Carry over teaching assignments (active teachers only)', carryTeach, setCarryTeach)}
             {check('Copy the timetable', carryTime, setCarryTime)}

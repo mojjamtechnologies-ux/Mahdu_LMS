@@ -1,6 +1,7 @@
 import { query } from '../../db/pool';
+import { levelName } from '../../utils/academicNames';
 
-const CLASS_NAME = `c.stage || ' ' || c.year || coalesce(c.arm, '')`;
+const CLASS_NAME = `class_label(c.stage, c.year, c.arm)`;
 const num = (v: unknown) => Number(v ?? 0);
 
 // A count that must never take the whole dashboard down (for example a table from a newer migration that has not been run yet).
@@ -21,7 +22,7 @@ export async function adminOverview() {
              select i.id, coalesce((select sum(amount_kobo) from invoice_lines l where l.invoice_id = i.id), 0) as total,
                     coalesce((select sum(amount_kobo) from payments p where p.invoice_id = i.id and p.reversed_at is null), 0) as paid
                from invoices i join terms t on t.id = i.term_id and t.is_current where i.status = 'open')
-           select (select s.name || ' · Term ' || t.term_number from terms t join academic_sessions s on s.id = t.session_id where t.is_current) as term,
+           select (select s.name || ' · Semester ' || t.term_number from terms t join academic_sessions s on s.id = t.session_id where t.is_current) as term,
                   coalesce(sum(total), 0)::bigint as billed, coalesce(sum(paid), 0)::bigint as collected,
                   coalesce(sum(greatest(total - paid, 0)), 0)::bigint as outstanding,
                   count(*) filter (where total - paid > 0)::int as students_owing
@@ -40,7 +41,7 @@ export async function adminOverview() {
     people: { students: role('student'), teachers: role('teacher'), parents: role('parent') },
     studentsByClass: byClass.rows.map((r) => ({ classId: r.id, name: r.name, students: r.students })),
     work: { openAssignments: work.rows[0].open_assignments, awaitingMarking: work.rows[0].awaiting_marking, pastDueUnmarked: work.rows[0].past_due_unmarked },
-    applications: { waiting: inbox[1], recent: applications.rows.map((a) => ({ id: a.id, reference: a.reference, name: `${a.first_name} ${a.last_name}`, applyingFor: `${a.class_stage} ${a.class_year}`, status: a.status, createdAt: a.created_at })) },
+    applications: { waiting: inbox[1], recent: applications.rows.map((a) => ({ id: a.id, reference: a.reference, name: `${a.first_name} ${a.last_name}`, applyingFor: levelName(a.class_stage, a.class_year), status: a.status, createdAt: a.created_at })) },
     fees: f.term ? { term: f.term, billedKobo: num(f.billed), collectedKobo: num(f.collected), outstandingKobo: num(f.outstanding), studentsOwing: f.students_owing } : null,
     announcements: announcements.rows.map((p) => ({ id: p.id, title: p.title, pinned: p.pinned, publishedAt: p.published_at })),
     recentActions: actions.rows.map((a) => ({ id: String(a.id), action: a.action, entityType: a.entity_type, createdAt: a.created_at, actor: a.first_name ? `${a.first_name} ${a.last_name}` : 'System' })),

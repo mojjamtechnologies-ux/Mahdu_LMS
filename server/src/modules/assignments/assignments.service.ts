@@ -7,7 +7,7 @@ import type { Role } from '../users/roles';
 
 type Actor = { id: string; role: Role; ip?: string };
 const notFound = (w = 'Assignment') => new AppError(404, `${w} not found`, 'NOT_FOUND');
-const CLASS_NAME = `c.stage || ' ' || c.year || coalesce(c.arm, '')`;
+const CLASS_NAME = `class_label(c.stage, c.year, c.arm)`;
 const num = (v: unknown) => (v === null || v === undefined ? null : Number(v));
 
 async function currentSessionId(db: Queryable) {

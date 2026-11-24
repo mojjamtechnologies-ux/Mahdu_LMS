@@ -800,7 +800,7 @@ async function newUser(
     (
       (await call("GET", "/students/me/report-cards", s1.token)).data as any[]
     ).map((t) => [t.termId, t.termName]),
-    [[t1.id, "First Term"]],
+    [[t1.id, "First Semester"]],
   );
   const card = (
     await call("GET", `/students/me/report-cards/${t1.id}`, s1.token)
@@ -820,8 +820,8 @@ async function newUser(
       "[School Name]",
       `student ${sfx}`,
       `S1-${sfx}`,
-      `JSS 1${tag}`,
-      "First Term",
+      `Ihdaady Awwal ${tag}`,
+      "First Semester",
       sess.name,
       false,
     ],

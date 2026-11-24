@@ -77,7 +77,7 @@ const titles = async (t: string) => (await feed(t)).items.map((n: any) => n.titl
   const a1 = (await feed(s1.token)).items[0];
   check('assignment notice links to the assignment', [a1.title, a1.link], ['New assignment: Homework 1', `/student/assignments/${asg.id}`]);
   check('the linked parent is told; an unrelated parent is not', [await count(p1.token), await count(p2.token)], [1, 0]);
-  check('parent notice names the class', ((await feed(p1.token)).items[0].title as string).startsWith('New assignment for JSS 3'), true);
+  check('parent notice names the class', ((await feed(p1.token)).items[0].title as string).startsWith('New assignment for Ihdaady Thaalith'), true);
   await call('PATCH', `/assignments/${asg.id}`, teacher.token, { status: 'closed' });
   await call('PATCH', `/assignments/${asg.id}`, teacher.token, { status: 'published' });
   check('closing and reopening does not notify again', await count(s1.token), 3);

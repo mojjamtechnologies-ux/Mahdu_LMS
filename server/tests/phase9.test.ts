@@ -73,14 +73,14 @@ const day = (ahead: number) => new Date(Date.now() + ahead * 864e5).toLocaleDate
   check('a missing required column is explained', (await imp('firstName,lastName\nA,B')).status, 400);
   check('a header with no students is refused', (await imp(head)).status, 400);
   const e1 = `ok1.${sfx}@example.com`; const e2 = `ok2.${sfx}@example.com`;
-  const bad = [head, `Ada,Obi,${e1},IM1-${sfx},0801,2013-05-21,JSS 1${tag}`, `,Obi,notanemail,IM2-${sfx},,2099-01-01,JSS 9Z`, `Bo,Lee,${e1},IM1-${sfx},,13/13/2013,`, `Cy,Dee,${s1.email},AD2-${sfx},,,`].join('\n');
+  const bad = [head, `Ada,Obi,${e1},IM1-${sfx},0801,2013-05-21,Ihdaady Awwal ${tag}`, `,Obi,notanemail,IM2-${sfx},,2099-01-01,JSS 9Z`, `Bo,Lee,${e1},IM1-${sfx},,13/13/2013,`, `Cy,Dee,${s1.email},AD2-${sfx},,,`].join('\n');
   const dv = await imp(bad);
   const fields = (r: number) => dv.data.errors.filter((e: any) => e.row === r).map((e: any) => e.field).sort();
   check('the check reports problems by line and field', [dv.data.canImport, dv.data.errorRows, fields(3), fields(4), fields(5)],
     [false, 3, ['class', 'dateOfBirth', 'email', 'firstName'], ['admissionNumber', 'dateOfBirth', 'email'], ['admissionNumber', 'email']]);
   check('a line that is fine has no errors', fields(2), []);
   check('importing a file with errors creates nothing', [(await imp(bad, false)).data.imported, (await query('select count(*)::int n from users where email = $1', [e1])).rows[0].n], [0, 0]);
-  const good = [head, `Ada,Obi,${e1},IM1-${sfx},0801,2013-05-21,JSS 1${tag}`, `"Bo, Jr",Lee,${e2},IM2-${sfx},,,`].join('\r\n');
+  const good = [head, `Ada,Obi,${e1},IM1-${sfx},0801,2013-05-21,Ihdaady Awwal ${tag}`, `"Bo, Jr",Lee,${e2},IM2-${sfx},,,`].join('\r\n');
   const dry = await imp(good);
   check('a clean file passes the dry run and still creates nothing', [dry.data.canImport, dry.data.validRows, (await query('select count(*)::int n from users where email = $1', [e1])).rows[0].n], [true, 2, 0]);
   const done = await imp(good, false);

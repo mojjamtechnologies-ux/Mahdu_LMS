@@ -8,7 +8,7 @@ export default function AdminAttendanceSummary() {
   const classes = useFetch<SchoolClass[]>('/academic/classes');
   return (
     <>
-      <PageHeader title="Class attendance summary" intro="A term's attendance for any class." />
+      <PageHeader title="Class attendance summary" intro="A semester's attendance for any class." />
       <AttendanceTabs role="admin" />
       <DataState loading={classes.loading} error={classes.error}>
         <ClassSummary classes={(classes.data ?? []).map((c) => ({ classId: c.id, className: c.name }))} />

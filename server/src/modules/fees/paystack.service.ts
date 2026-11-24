@@ -51,7 +51,7 @@ export async function initiate(parent: { id: string; email: string }, invoiceId:
   const open = (await query("select count(*)::int as n from paystack_transactions where invoice_id = $1 and status = 'pending' and created_at > now() - interval '1 hour'", [invoiceId])).rows[0].n as number;
   if (open >= 5) throw new AppError(409, 'You have several unfinished payments for this invoice. Use "Check payment status" before starting another.', 'TOO_MANY_PENDING');
 
-  const reference = `KOK-${inv.number}-${crypto.randomBytes(6).toString('hex')}`; // unguessable and unique
+  const reference = `MREI-${inv.number}-${crypto.randomBytes(6).toString('hex')}`; // unguessable and unique
   const data = await paystack('/transaction/initialize', {
     method: 'POST',
     body: { email: parent.email, amount, currency: 'NGN', reference, callback_url: `${env.CLIENT_ORIGIN}/parent/fees/${invoiceId}`, metadata: { invoice_id: invoiceId, invoice_number: inv.number, payer_id: parent.id } },

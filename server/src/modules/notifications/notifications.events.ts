@@ -2,7 +2,7 @@ import { pool, query } from '../../db/pool';
 import { fmtLagos } from '../../utils/dates';
 import { notifyUsers, parentsOfStudents, safely, studentsInClass } from './notifications.service';
 
-const CLASS_NAME = `c.stage || ' ' || c.year || coalesce(c.arm, '')`;
+const CLASS_NAME = `class_label(c.stage, c.year, c.arm)`;
 const marksText = (m: unknown, max: unknown) => `${Number(m)} / ${Number(max)}`;
 
 // ---- lesson notes and video lessons: told once, the first time they are published ----

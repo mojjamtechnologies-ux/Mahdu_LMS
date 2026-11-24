@@ -64,7 +64,7 @@ async function newUser(adminT: string, role: string, extra: Record<string, strin
 
   // terms
   const t1 = await call('POST', '/academic/terms', A, { sessionId: s1.data.id, termNumber: 1, startDate: '2026-09-14', endDate: '2026-12-18' });
-  check('create term', [t1.status, t1.data.name], [201, 'First Term']);
+  check('create term', [t1.status, t1.data.name], [201, 'First Semester']);
   check('duplicate term number -> 409', (await call('POST', '/academic/terms', A, { sessionId: s1.data.id, termNumber: 1, startDate: '2027-01-01', endDate: '2027-03-01' })).status, 409);
   check('term 4 -> 400', (await call('POST', '/academic/terms', A, { sessionId: s1.data.id, termNumber: 4, startDate: '2027-01-01', endDate: '2027-03-01' })).status, 400);
   await call('POST', `/academic/terms/${t1.data.id}/set-current`, A);
@@ -77,7 +77,7 @@ async function newUser(adminT: string, role: string, extra: Record<string, strin
   const classes = (await call('GET', '/academic/classes', A)).data as any[];
   const armTag = 'T' + sfx.slice(-3).toUpperCase().replace(/[^A-Z0-9]/g, 'X');
   const c1 = await call('POST', '/academic/classes', A, { stage: 'JSS', year: 1, arm: armTag });
-  check('create class with arm', [c1.status, c1.data.name], [201, `JSS 1${armTag}`]);
+  check('create class with arm', [c1.status, c1.data.name], [201, `Ihdaady Awwal ${armTag}`]);
   check('duplicate class -> 409', (await call('POST', '/academic/classes', A, { stage: 'JSS', year: 1, arm: armTag })).status, 409);
   check('SSS 4 -> 400', (await call('POST', '/academic/classes', A, { stage: 'SSS', year: 4 })).status, 400);
   const c2 = await call('POST', '/academic/classes', A, { stage: 'SSS', year: 2, arm: armTag });
@@ -101,7 +101,7 @@ async function newUser(adminT: string, role: string, extra: Record<string, strin
   check('teacher cannot be enrolled -> 400', (await call('POST', '/academic/enrolments', A, { studentId: teacher.id, classId: c1.data.id, sessionId: s2.data.id })).status, 400);
   await call('POST', '/academic/enrolments', A, { studentId: student.id, classId: c2.data.id, sessionId: s2.data.id });
   const en = (await call('GET', `/academic/enrolments?sessionId=${s2.data.id}`, A)).data as any[];
-  check('re-enrolling moves the student (one class per session)', en.filter((x) => x.studentId === student.id).map((x) => x.className), [`SSS 2${armTag}`]);
+  check('re-enrolling moves the student (one class per session)', en.filter((x) => x.studentId === student.id).map((x) => x.className), [`Thaanawiy Thaaniy ${armTag}`]);
   await call('POST', '/academic/enrolments', A, { studentId: student.id, classId: c1.data.id, sessionId: s2.data.id });
   await call('POST', '/academic/enrolments', A, { studentId: student2.id, classId: c1.data.id, sessionId: s2.data.id });
   const dir = (await call('GET', `/students?classId=${c1.data.id}`, A)).data;
@@ -112,14 +112,14 @@ async function newUser(adminT: string, role: string, extra: Record<string, strin
   // guardian links and object-level access
   check('student as parent -> 400', (await call('POST', '/parent-links', A, { parentId: student.id, studentId: student.id, relationship: 'guardian' })).status, 400);
   check('link parent to student', (await call('POST', '/parent-links', A, { parentId: parent.id, studentId: student.id, relationship: 'mother', isPrimary: true })).status, 201);
-  check('parent sees own child + class', ((await call('GET', '/parents/me/children', parent.token)).data as any[]).map((c) => [c.id, c.className]), [[student.id, `JSS 1${armTag}`]]);
+  check('parent sees own child + class', ((await call('GET', '/parents/me/children', parent.token)).data as any[]).map((c) => [c.id, c.className]), [[student.id, `Ihdaady Awwal ${armTag}`]]);
   check('other parent sees nothing', (await call('GET', '/parents/me/children', parent2.token)).data, []);
   check('parent cannot create links -> 403', (await call('POST', '/parent-links', parent.token, { parentId: parent.id, studentId: student2.id, relationship: 'mother' })).status, 403);
   check('parent cannot enrol -> 403', (await call('POST', '/academic/enrolments', parent.token, { studentId: student.id, classId: c1.data.id, sessionId: s2.data.id })).status, 403);
   check('teacher cannot use parent endpoint -> 403', (await call('GET', '/parents/me/children', teacher.token)).status, 403);
   check('teacher sees own current assignments', ((await call('GET', '/teachers/me/assignments', teacher.token)).data as any[]).map((x) => x.subjectName), [`Maths ${sfx}`]);
   const mine = (await call('GET', '/students/me/class', student.token)).data;
-  check('student sees own class and subjects', [mine.className, mine.subjects.length], [`JSS 1${armTag}`, 2]);
+  check('student sees own class and subjects', [mine.className, mine.subjects.length], [`Ihdaady Awwal ${armTag}`, 2]);
   check('unlink', (await call('DELETE', `/parent-links/${parent.id}/${student.id}`, A)).status, 200);
   check('parent sees nothing after unlink', (await call('GET', '/parents/me/children', parent.token)).data, []);
 

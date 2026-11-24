@@ -1,6 +1,6 @@
 import { query } from '../../db/pool';
 
-const CLASS_NAME = `c.stage || ' ' || c.year || coalesce(c.arm, '')`;
+const CLASS_NAME = `class_label(c.stage, c.year, c.arm)`;
 const TODAY = `(now() at time zone 'Africa/Lagos')::date`;
 const num = (v: unknown) => Number(v ?? 0);
 async function safe<T>(fn: () => Promise<T>, fallback: T): Promise<T> { try { return await fn(); } catch { return fallback; } }
@@ -67,7 +67,7 @@ export async function childOverview(studentId: string, withFees: boolean) {
     },
     recentMarks: marks.rows.map((m) => ({ id: m.id, title: m.title, marks: num(m.marks), maxMarks: num(m.max_marks), at: m.at })),
     attendance: att && att.opened > 0 ? { term: att.term_number, opened: att.opened, present: att.present, late: att.late, absent: att.absent, percent: Math.round((attended / att.opened) * 100) } : null,
-    latestResult: result.rows[0] ? { termId: result.rows[0].term_id, label: `${result.rows[0].session_name}, Term ${result.rows[0].term_number}` } : null,
+    latestResult: result.rows[0] ? { termId: result.rows[0].term_id, label: `${result.rows[0].session_name}, Semester ${result.rows[0].term_number}` } : null,
     fees: fees ? (() => { const total = num(fees.total), paid = num(fees.paid); return { invoiceId: fees.id, number: fees.number, totalKobo: total, paidKobo: paid, outstandingKobo: Math.max(total - paid, 0), dueDate: fees.due_date }; })() : null,
   };
 }

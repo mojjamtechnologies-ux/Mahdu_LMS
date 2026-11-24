@@ -2,7 +2,7 @@ import PortalLayout from "./PortalLayout";
 
 const NAV = [
   { to: "/admin", label: "Overview", end: true },
-  { to: "/admin/academic", label: "Sessions and terms" },
+  { to: "/admin/academic", label: "Sessions and semesters" },
   { to: "/admin/classes", label: "Classes and subjects" },
   { to: "/admin/accounts", label: "Accounts" },
   { to: "/admin/import", label: "Import students" },
@@ -35,5 +35,5 @@ const NAV = [
 ];
 
 export default function AdminLayout() {
-  return <PortalLayout roleLabel="Administrator" nav={NAV} />;
+  return <PortalLayout roleLabel="role.administrator" nav={NAV} />;
 }

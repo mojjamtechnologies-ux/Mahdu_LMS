@@ -27,7 +27,7 @@ function ChildAttendance({ child, termId }: { child: Child; termId: string }) {
   const s = data.data?.summary; const days = data.data?.days ?? [];
   return (
     <DataState loading={data.loading && !data.data} error={data.error}>
-      {s && !s.opened ? <Card><Empty>No attendance has been recorded for {child.firstName} in this term yet.</Empty></Card> : s && (
+      {s && !s.opened ? <Card><Empty>No attendance has been recorded for {child.firstName} in this semester yet.</Empty></Card> : s && (
         <div className="space-y-6">
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
             <Stat label="School days" value={s.opened} hint="register taken" />
@@ -98,7 +98,7 @@ export default function ParentAttendance() {
           <>
             <div className="mb-6 grid gap-4 sm:max-w-xl sm:grid-cols-2">
               {kids.data.length > 1 && <Select label="Child" value={kid?.id ?? ''} onChange={(e) => setKidPick(e.target.value)}>{kids.data.map((k) => <option key={k.id} value={k.id}>{k.firstName} {k.lastName}</option>)}</Select>}
-              <Select label="Term" value={tid} onChange={(e) => setTermPick(e.target.value)}>{terms.map((t) => <option key={t.id} value={t.id}>{label(t)}</option>)}</Select>
+              <Select label="Semester" value={tid} onChange={(e) => setTermPick(e.target.value)}>{terms.map((t) => <option key={t.id} value={t.id}>{label(t)}</option>)}</Select>
             </div>
             {kid && <ChildAttendance key={`${kid.id}-${tid}`} child={kid} termId={tid} />}
           </>

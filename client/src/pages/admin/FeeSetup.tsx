@@ -74,12 +74,12 @@ export default function FeeSetup() {
           </form>
         </Card>
 
-        <Card title="2. Fees for a class and term">
+        <Card title="2. Fees for a class and semester">
           <DataState loading={tLoading} error={tError}>
             {!terms.length ? <Empty>Add a session and its terms first (Sessions and terms).</Empty> : (
               <>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <Select label="Term" value={tid} onChange={(e) => { setTermId(e.target.value); setSaved(''); }}>{terms.map((t) => <option key={t.id} value={t.id}>{label(t)}</option>)}</Select>
+                  <Select label="Semester" value={tid} onChange={(e) => { setTermId(e.target.value); setSaved(''); }}>{terms.map((t) => <option key={t.id} value={t.id}>{label(t)}</option>)}</Select>
                   <Select label="Class" value={cid} onChange={(e) => { setClassId(e.target.value); setSaved(''); }}>{classes.data?.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}</Select>
                 </div>
                 <div className="mt-4">
@@ -108,7 +108,7 @@ export default function FeeSetup() {
         <div className="xl:col-span-2">
           <Card title="3. Create invoices">
             <form onSubmit={generate} className="grid gap-4 sm:grid-cols-4" noValidate>
-              <Select label="Term" value={genTerm || tid} onChange={(e) => setGenTerm(e.target.value)}>{terms.map((t) => <option key={t.id} value={t.id}>{label(t)}</option>)}</Select>
+              <Select label="Semester" value={genTerm || tid} onChange={(e) => setGenTerm(e.target.value)}>{terms.map((t) => <option key={t.id} value={t.id}>{label(t)}</option>)}</Select>
               <Select label="Class" value={genClass} onChange={(e) => setGenClass(e.target.value)}>
                 <option value="">All classes that have fees set</option>{classes.data?.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
               </Select>

@@ -193,7 +193,7 @@ export default function Timetables() {
       {!sessions.loading && !current && (
         <div className="mb-4">
           <Alert tone="error">
-            No current session exists yet. Create one under Sessions and terms
+            No current session exists yet. Create one under Sessions and semesters
             first.
           </Alert>
         </div>

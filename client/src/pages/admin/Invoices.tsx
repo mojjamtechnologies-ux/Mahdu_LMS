@@ -37,7 +37,7 @@ export default function Invoices() {
 
   async function remind() {
     const who = classId ? `students in ${classes.data?.find((c) => c.id === classId)?.name}` : 'all students';
-    if (!window.confirm(`Send a fees reminder to the guardians of ${who} who still owe money for this term?`)) return;
+    if (!window.confirm(`Send a fees reminder to the guardians of ${who} who still owe money for this semester?`)) return;
     setResult(null);
     let r: ReminderResult | undefined;
     if (await act.run(async () => { r = await api<ReminderResult>('/fees/reminders', { body: { termId: tid, ...(classId ? { classId } : {}) } }); })) setResult(r!);
@@ -52,7 +52,7 @@ export default function Invoices() {
       {!termsQ.loading && !terms.length ? <Card><Empty>Set up a session and term first.</Empty></Card> : (
         <>
           <div className="mb-6 flex flex-wrap items-end gap-4">
-            <div className="w-full max-w-sm"><Select label="Term" value={tid} onChange={(e) => setTermId(e.target.value)}>{terms.map((t) => <option key={t.id} value={t.id}>{label(t)}</option>)}</Select></div>
+            <div className="w-full max-w-sm"><Select label="Semester" value={tid} onChange={(e) => setTermId(e.target.value)}>{terms.map((t) => <option key={t.id} value={t.id}>{label(t)}</option>)}</Select></div>
             <div className="flex flex-wrap gap-2">
               <SmallButton disabled={!tid || dl.busy} onClick={() => dl.run(() => downloadFromApi(`/fees/export/summary.csv?termId=${tid}`, 'fees-summary.csv'))}>Download summary (CSV)</SmallButton>
               <SmallButton disabled={!tid || dl.busy} onClick={() => dl.run(() => downloadFromApi(`/fees/export/invoices.csv?${exportQs}`, 'invoices.csv'))}>Download invoices (CSV)</SmallButton>

@@ -8,6 +8,7 @@ import { storage } from '../../services/storage';
 import { deleteIfOrphaned } from '../learning/files.service';
 import { notifyUsers, safely } from '../notifications/notifications.service';
 import { DEFAULTS, findPlaceholders, SECTIONS, type Section, type SiteContent } from './site.defaults';
+import { levelName, maxYear } from '../../utils/academicNames';
 
 type Ctx = { actorId: string; ip?: string };
 const notFound = (w: string) => new AppError(404, `${w} not found`, 'NOT_FOUND');
@@ -273,8 +274,8 @@ export async function publicGallery() {
 export async function publicAcademics() {
   const { rows } = await query(
     `select c.stage, c.year, coalesce(array_agg(distinct s.name::text order by s.name::text) filter (where s.name is not null), '{}') as subjects from classes c
-       left join class_subjects cs on cs.class_id = c.id left join subjects s on s.id = cs.subject_id group by c.stage, c.year order by c.stage desc, c.year`);
-  const stages = ['JSS', 'SSS'].map((stage) => ({ stage, levels: [1, 2, 3].map((year) => ({ year, name: `${stage} ${year}`, subjects: ((rows.find((r) => r.stage === stage && r.year === year)?.subjects ?? []) as (string | null)[]).filter(Boolean) })) }));
+       left join class_subjects cs on cs.class_id = c.id left join subjects s on s.id = cs.subject_id group by c.stage, c.year order by c.stage, c.year`);
+  const stages = (['JSS', 'SSS'] as const).map((stage) => ({ stage, levels: Array.from({ length: maxYear(stage) }, (_, i) => i + 1).map((year) => ({ year, name: levelName(stage, year), subjects: ((rows.find((r) => r.stage === stage && r.year === year)?.subjects ?? []) as (string | null)[]).filter(Boolean) })) }));
   return { stages };
 }
 

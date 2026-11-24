@@ -3,7 +3,7 @@ import { AppError } from '../../utils/AppError';
 import { audit } from '../../services/audit';
 import { assertRole } from '../academic/academic.service';
 
-const CLASS_NAME = `c.stage || ' ' || c.year || coalesce(c.arm, '')`;
+const CLASS_NAME = `class_label(c.stage, c.year, c.arm)`;
 
 // ---------- guardian links (admin only: official relationships need school verification) ----------
 export async function createLink(

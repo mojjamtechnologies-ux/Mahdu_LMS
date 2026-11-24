@@ -3,7 +3,7 @@ import { env, isProd } from '../../config/env';
 import { ok } from '../../utils/respond';
 import * as auth from './auth.service';
 
-const COOKIE = 'kok_refresh';
+const COOKIE = 'mrei_refresh';
 const meta = (req: Request) => ({ ip: req.ip, userAgent: req.headers['user-agent'] });
 
 // Frontend (Vercel) and API (Render) are different sites in production, so the cookie must be SameSite=None.

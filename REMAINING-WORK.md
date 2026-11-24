@@ -1,4 +1,4 @@
-# Kingdom of Knowledge: what remains
+# MREI: what remains
 
 Sizes: **S** = under a day, **M** = a few days, **L** = a week or more. They are rough guides for one developer.
 
@@ -134,7 +134,7 @@ Sizes: **S** = under a day, **M** = a few days, **L** = a week or more. They are
 - [ ] How long applications and messages are kept (a placeholder in the privacy notice).
 - [ ] Fee categories and amounts for each class and term, any discounts, and payment deadlines.
 - [ ] Confirm the grading scale (the WAEC-style template is loaded only as a starting point) and the assessment columns (for example CA 1, CA 2 and Exam).
-- [ ] Classes (and arms such as JSS 1A), subjects per class, term dates, and which teacher is form teacher of each class.
+- [ ] Classes (and arms such as Ihdaady Awwal A), subjects per class, term dates, and which teacher is form teacher of each class.
 - [ ] Photos for the gallery, and a logo.
 - [ ] A lawyer's review of the privacy notice and how the school complies with the Nigeria Data Protection Act 2023.
 

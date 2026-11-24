@@ -665,7 +665,7 @@ const dob = (yearsAgo: number) =>
       ac.stages[0].levels.map((l: any) => l.name),
       ac.stages[0].levels[2].subjects.includes(`Civic Education ${sfx}`),
     ],
-    [["JSS", "SSS"], ["JSS 1", "JSS 2", "JSS 3"], true],
+    [["JSS", "SSS"], ["Ihdaady Awwal", "Ihdaady Thaany", "Ihdaady Thaalith", "Ihdaady Raabih"], true],
   );
   check(
     "and nothing about teachers or students",
@@ -711,7 +711,7 @@ const dob = (yearsAgo: number) =>
   );
   check(
     "a class that does not exist refused",
-    (await post({ ...app, classYear: 4 })).status,
+    (await post({ ...app, classStage: "SSS", classYear: 4 })).status,
     400,
   );
   const before2 = (
@@ -734,7 +734,7 @@ const dob = (yearsAgo: number) =>
   const ok1 = await post(app);
   check(
     "a valid application returns a reference",
-    [ok1.status, /^KOK-APP-\d{6}$/.test(ok1.data.reference)],
+    [ok1.status, /^MREI-APP-\d{6}$/.test(ok1.data.reference)],
     [201, true],
   );
   check(
@@ -771,15 +771,15 @@ const dob = (yearsAgo: number) =>
       found.data.applyingFor,
       found.data.applicantFirstName,
     ],
-    [200, "received", "Received", "JSS 1", "Ada"],
+    [200, "received", "Received", "Ihdaady Awwal", "Ada"],
   );
   check(
     "a wrong email gets the same answer as an unknown reference",
     [
       (await look("someone@else.com")).status,
-      (await look(app.guardianEmail, "KOK-APP-999999")).status,
+      (await look(app.guardianEmail, "MREI-APP-999999")).status,
       (await look("someone@else.com")).error.message ===
-        (await look(app.guardianEmail, "KOK-APP-999999")).error.message,
+        (await look(app.guardianEmail, "MREI-APP-999999")).error.message,
     ],
     [404, 404, true],
   );

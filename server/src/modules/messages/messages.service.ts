@@ -3,7 +3,7 @@ import { AppError } from '../../utils/AppError';
 import { audit } from '../../services/audit';
 
 type Actor = { id: string; role: 'admin' | 'teacher' | 'student' | 'parent'; ip?: string };
-const CLASS_NAME = `c.stage || ' ' || c.year || coalesce(c.arm, '')`;
+const CLASS_NAME = `class_label(c.stage, c.year, c.arm)`;
 const HOURLY_LIMIT = 20;
 const notFound = () => new AppError(404, 'Conversation not found', 'NOT_FOUND');
 

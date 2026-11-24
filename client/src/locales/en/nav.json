@@ -1,6 +1,7 @@
 {
   "overview": "Overview",
   "sessions_and_terms": "Sessions and terms",
+  "sessions_and_semesters": "Sessions and semesters",
   "classes_and_subjects": "Classes and subjects",
   "accounts": "Accounts",
   "import_students": "Import students",
@@ -11,6 +12,8 @@
   "new_session_promotion": "New session promotion",
   "attendance": "Attendance",
   "form_teachers": "Form teachers",
+  "class_teachers": "Class teachers",
+  "parents_guardians": "Parents | Guardians",
   "guardians": "Guardians",
   "grading_and_assessment": "Grading and assessment",
   "results": "Results",

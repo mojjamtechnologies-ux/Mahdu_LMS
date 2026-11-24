@@ -33,6 +33,7 @@ async function newUser(adminT: string, role: string, extra: Record<string, strin
   await call('POST', '/parent-links', A, { parentId: par.id, studentId: stu.id, relationship: 'mother' });
   const y = 2100 + (parseInt(sfx, 36) % 800);
   const sess = (await call('POST', '/academic/sessions', A, { name: `${y}/${y + 1}`, startDate: '2100-01-01', endDate: '2100-12-31' })).data;
+  await call('POST', '/academic/terms', A, { sessionId: sess.id, termNumber: 1, startDate: '2100-01-01', endDate: '2100-05-31' }); // a new session has no semesters until they are added
   const term = (await query('select id from terms where session_id = $1 order by term_number limit 1', [sess.id])).rows[0];
   const tag = 'P' + sfx.slice(-3).toUpperCase().replace(/[^A-Z0-9]/g, 'X');
   const cls = (await call('POST', '/academic/classes', A, { stage: 'JSS', year: 1, arm: tag })).data;

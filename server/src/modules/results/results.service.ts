@@ -3,21 +3,21 @@ import { AppError } from '../../utils/AppError';
 import { SCHOOL } from '../../config/school';
 import { audit } from '../../services/audit';
 import { notifyUsers, parentsOfStudents, safely } from '../notifications/notifications.service';
-import { TERM_NAMES } from '../fees/fees.service';
 import { studentSummary } from '../attendance/attendance.service';
 import { listComponents } from './components.service';
 import { Band, getBands, gradeFor } from './grading.service';
 import type { Role } from '../users/roles';
+import { termName } from '../../utils/academicNames';
 
 type Actor = { id: string; role: Role; ip?: string };
-const CLASS_NAME = `c.stage || ' ' || c.year || coalesce(c.arm, '')`;
+const CLASS_NAME = `class_label(c.stage, c.year, c.arm)`;
 const r2 = (n: number) => Math.round(n * 100) / 100;
 const notFound = (w: string) => new AppError(404, `${w} not found`, 'NOT_FOUND');
 
 async function termInfo(db: Queryable, termId: string) {
   const t = (await db.query('select t.id, t.session_id, t.term_number, s.name as session_name from terms t join academic_sessions s on s.id = t.session_id where t.id = $1', [termId])).rows[0];
   if (!t) throw notFound('Term');
-  return { id: t.id as string, sessionId: t.session_id as string, name: TERM_NAMES[t.term_number - 1], sessionName: t.session_name as string };
+  return { id: t.id as string, sessionId: t.session_id as string, name: termName(t.term_number), sessionName: t.session_name as string };
 }
 
 // Teachers may only enter scores for the class and subject they are assigned to in that session. Administrators may enter any.
@@ -153,7 +153,7 @@ export async function classResults(termId: string, classId: string) {
 export async function status(termId: string) {
   const term = await termInfo(pool, termId);
   const classes = (await query(
-    `select c.id, ${CLASS_NAME} as name from classes c where exists (select 1 from enrolments e where e.class_id = c.id and e.session_id = $1) order by c.stage desc, c.year, c.arm nulls first`, [term.sessionId])).rows;
+    `select c.id, ${CLASS_NAME} as name from classes c where exists (select 1 from enrolments e where e.class_id = c.id and e.session_id = $1) order by c.stage, c.year, c.arm nulls first`, [term.sessionId])).rows;
   const bands = await getBands();
   const pubs = new Map((await query('select class_id, published_at from result_publications where term_id = $1', [termId])).rows.map((r) => [r.class_id, r.published_at]));
   const out = [];
@@ -236,5 +236,5 @@ export async function publishedTermsFor(studentId: string) {
     `select t.id, t.term_number, s.name as session_name, rp.published_at from enrolments e join terms t on t.session_id = e.session_id
        join result_publications rp on rp.term_id = t.id and rp.class_id = e.class_id join academic_sessions s on s.id = e.session_id
       where e.student_id = $1 and e.status in ('active', 'graduated') order by t.start_date desc`, [studentId]);
-  return rows.map((r) => ({ termId: r.id, termName: TERM_NAMES[r.term_number - 1], sessionName: r.session_name, publishedAt: r.published_at }));
+  return rows.map((r) => ({ termId: r.id, termName: termName(r.term_number), sessionName: r.session_name, publishedAt: r.published_at }));
 }

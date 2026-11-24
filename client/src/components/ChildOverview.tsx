@@ -183,7 +183,7 @@ export default function ChildOverview({
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <Card title="Attendance this term">
+        <Card title="Attendance this semester">
           {d.attendance ? (
             <div className="space-y-1 text-sm">
               <p className="text-2xl font-semibold">{d.attendance.percent}%</p>
@@ -221,7 +221,7 @@ export default function ChildOverview({
           )}
         </Card>
         {d.fees && (
-          <Card title="School fees this term">
+          <Card title="School fees this semester">
             <div className="space-y-1 text-sm">
               <p>
                 Outstanding <b>{naira(d.fees.outstandingKobo)}</b>

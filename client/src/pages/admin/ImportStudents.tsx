@@ -20,7 +20,7 @@ export default function ImportStudents() {
       <PageHeader title="Import students" intro="Create many student accounts from a spreadsheet saved as CSV. Nothing is created until the file passes the check, and then every student is created together or none are." />
       <div className="space-y-6">
         <Card title="1. Get your file ready">
-          <p className="mb-3 text-sm">Columns: <b>firstName, lastName, email, admissionNumber</b> are required; <b>phone, dateOfBirth</b> (YYYY-MM-DD) and <b>class</b> (for example JSS 1A, placed in the current session) are optional. Up to 500 students per file. Each student needs their own email address.</p>
+          <p className="mb-3 text-sm">Columns: <b>firstName, lastName, email, admissionNumber</b> are required; <b>phone, dateOfBirth</b> (YYYY-MM-DD) and <b>class</b> (for example Ihdaady Awwal A, placed in the current session) are optional. Up to 500 students per file. Each student needs their own email address.</p>
           <SmallButton onClick={() => dl.run(() => downloadFromApi('/students/import/template', 'students-template.csv'))}>Download a template</SmallButton>
           {dl.error && <div className="mt-3"><Alert tone="error">{dl.error}</Alert></div>}
         </Card>

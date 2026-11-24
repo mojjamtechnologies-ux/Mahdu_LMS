@@ -3,7 +3,7 @@ import { AppError } from '../../utils/AppError';
 import { audit } from '../../services/audit';
 import { notifyUsers, parentsOfStudents, safely, studentsInClass } from '../notifications/notifications.service';
 
-const CLASS_NAME = `c.stage || ' ' || c.year || coalesce(c.arm, '')`;
+const CLASS_NAME = `class_label(c.stage, c.year, c.arm)`;
 const hhmm = (col: string) => `to_char(${col}, 'HH24:MI')`;
 const DAYS = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 const notFound = (w: string) => new AppError(404, `${w} not found`, 'NOT_FOUND');
@@ -146,14 +146,14 @@ const scheduleRow = (r: any) => ({
   isPublished: r.is_published, publishedAt: r.published_at, paperCount: r.paper_count ?? undefined,
 });
 const SCHEDULE_SQL = `
-  select x.*, (array['First Term','Second Term','Third Term'])[t.term_number] as term_name, s.name as session_name,
+  select x.*, (array['First Semester','Second Semester','Semester 3'])[t.term_number] as term_name, s.name as session_name,
          (select count(*)::int from exam_papers p where p.schedule_id = x.id) as paper_count
     from exam_schedules x join terms t on t.id = x.term_id join academic_sessions s on s.id = t.session_id`;
 
 const PAPER_SQL = `
   select p.id, p.schedule_id, p.class_id, p.subject_id, p.exam_date, ${hhmm('p.start_time')} as start_time, ${hhmm('p.end_time')} as end_time,
          p.venue, p.instructions, ${CLASS_NAME} as class_name, sb.name as subject_name, x.title as schedule_title, x.term_id, x.is_published,
-         t.session_id, (array['First Term','Second Term','Third Term'])[t.term_number] as term_name
+         t.session_id, (array['First Semester','Second Semester','Semester 3'])[t.term_number] as term_name
     from exam_papers p join exam_schedules x on x.id = p.schedule_id join terms t on t.id = x.term_id
     join classes c on c.id = p.class_id join subjects sb on sb.id = p.subject_id`;
 const paperRow = (r: any) => ({

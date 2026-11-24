@@ -35,7 +35,7 @@ export default function Results() {
       <PageHeader title="Results" intro="See how far each class has got, check the results, and publish them when they are ready. Students and parents only see published results." />
       {!termsQ.loading && !terms.length ? <Card><Empty>Set up a session and its terms first.</Empty></Card> : (
         <>
-          <div className="mb-6 max-w-sm"><Select label="Term" value={tid} onChange={(e) => { setPickedTerm(e.target.value); setOpen(''); setMissing(null); setError(''); setNote(''); }}>{terms.map((t) => <option key={t.id} value={t.id}>{label(t)}</option>)}</Select></div>
+          <div className="mb-6 max-w-sm"><Select label="Semester" value={tid} onChange={(e) => { setPickedTerm(e.target.value); setOpen(''); setMissing(null); setError(''); setNote(''); }}>{terms.map((t) => <option key={t.id} value={t.id}>{label(t)}</option>)}</Select></div>
           {error && <div className="mb-4"><Alert tone="error">{error}{missing && <ul className="mt-2 list-disc pl-5">{missing.map((m) => <li key={m.field}>{m.field}: {m.message}</li>)}</ul>}</Alert>{missing && open && <div className="mt-2"><SmallButton onClick={() => publish(true, open)} disabled={busy}>Publish anyway</SmallButton></div>}</div>}
           {note && <div className="mb-4"><Alert tone="success">{note}</Alert></div>}
           <Card title="Classes">
@@ -60,7 +60,7 @@ export default function Results() {
                         {s.subjects.map((x) => <Td key={x.subjectId}>{x.complete ? <>{num(x.percent)}% <Badge tone="neutral">{x.grade}</Badge></> : <span className="text-red-700">missing</span>}</Td>)}
                         <Td>{s.ranked ? <>{num(s.average)}% <Badge tone="good">{s.grade}</Badge></> : <span className="text-muted">Not ranked</span>}</Td><Td>{s.ranked ? `${ordinal(s.position)} of ${res.data!.rankedCount}` : '-'}</Td>
                         <Td className="text-right"><Link className="font-medium text-brand-700 underline" to={`/admin/results/${tid}/${s.studentId}`}>Report card</Link></Td></tr>))}</tbody></Table>
-                ) : <Empty>No scores have been entered for this class and term yet. Teachers enter them under Scores.</Empty>)}
+                ) : <Empty>No scores have been entered for this class and semester yet. Teachers enter them under Scores.</Empty>)}
               </DataState>
               <p className="mt-3 text-sm text-muted">A student is ranked only when every subject that has scores for this class is complete. Positions use the average percentage; equal averages share a place.</p>
             </Card></div>

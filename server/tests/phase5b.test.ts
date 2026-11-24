@@ -84,7 +84,7 @@ const chargeSuccess = (reference: string, amount: number, currency = 'NGN') => (
   check('Paystack was asked for exactly the invoice amount, in NGN, for this parent', [sent.amount, sent.currency, sent.email], [NAIRA(100000), 'NGN', p1.email]);
   check('Paystack was told where to send the parent back', sent.callback_url.endsWith(`/parent/fees/${i1.id}`), true);
   check('the secret key was sent as a bearer token', fake.requests[0].auth, `Bearer ${SECRET}`);
-  check('the reference is long and unguessable', /^KOK-INV-\d{6}-[0-9a-f]{12}$/.test(start.data.reference), true);
+  check('the reference is long and unguessable', /^MREI-INV-\d{6}-[0-9a-f]{12}$/.test(start.data.reference), true);
   check('nothing is marked paid just because a payment was started', [(await payments(i1.id)).length, (await call('GET', `/parents/me/invoices/${i1.id}`, p1.token)).data.balanceKobo], [0, NAIRA(100000)]);
   const det = (await call('GET', `/parents/me/invoices/${i1.id}`, p1.token)).data;
   check('invoice page says online payment is available and lists the unfinished payment', [det.onlinePaymentAvailable, det.pendingPayments.length], [true, 1]);
@@ -94,7 +94,7 @@ const chargeSuccess = (reference: string, amount: number, currency = 'NGN') => (
   const waiting = await verify(p1.token, start.data.reference);
   check('still in progress at Paystack: nothing counted', [waiting.data.outcome, (await payments(i1.id)).length], ['pending', 0]);
   check("another parent cannot check someone else's payment", (await verify(p2.token, start.data.reference)).status, 404);
-  check('an unknown reference is not found', (await verify(p1.token, 'KOK-INV-000000-doesnotexist')).status, 404);
+  check('an unknown reference is not found', (await verify(p1.token, 'MREI-INV-000000-doesnotexist')).status, 404);
   fake.outcomes.set(start.data.reference, { status: 'success' });
   const done = await verify(p1.token, start.data.reference);
   check('confirmed by Paystack: payment counted', [done.data.outcome, done.data.status], ['applied', 'success']);
@@ -122,7 +122,7 @@ const chargeSuccess = (reference: string, amount: number, currency = 'NGN') => (
   const stored = JSON.stringify((await query('select summary from paystack_events where reference = $1', [w1.data.reference])).rows);
   check('no card details or customer data are stored from the webhook', ['last4', '4081', 'bin', 'customer', 'authorization'].some((k) => stored.includes(k)), false);
   check('a verify after the webhook is also harmless', [(await verify(p2.token, w1.data.reference)).data.outcome, (await payments(i2.id)).length], ['already_applied', 1]);
-  check('webhook for an unknown reference is acknowledged and ignored', [await webhook(chargeSuccess('KOK-INV-999999-unknown', 100)), (await query("select result from paystack_events where reference = 'KOK-INV-999999-unknown'")).rows[0].result], [200, 'unknown']);
+  check('webhook for an unknown reference is acknowledged and ignored', [await webhook(chargeSuccess('MREI-INV-999999-unknown', 100)), (await query("select result from paystack_events where reference = 'MREI-INV-999999-unknown'")).rows[0].result], [200, 'unknown']);
 
   // wrong amount in an otherwise valid, signed webhook
   const w2 = await init(p2.token, i2.id, NAIRA(10000));

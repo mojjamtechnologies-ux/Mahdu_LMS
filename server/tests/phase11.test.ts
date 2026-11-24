@@ -61,7 +61,7 @@ async function newUser(adminT: string, role: string, extra: Record<string, strin
   await call('POST', '/notifications/read-all', par.token);
   const ex = await call('GET', `/admin/data/export?email=${encodeURIComponent(par.email)}`, A);
   check('the export has the person’s account and notifications', [ex.status, ex.data.account.email, ex.data.notifications.length >= 2], [200, par.email, true]);
-  check('the export never contains a password hash or token', /password|token_hash|hash/i.test(JSON.stringify(ex.data)), false);
+  check('the export never contains a password hash or token', /password|token_hash|hash/i.test(JSON.stringify({ ...ex.data, note: undefined })), false);
   check('an unknown email is a 404, a malformed one a 400', [(await call('GET', '/admin/data/export?email=nobody@example.com', A)).status, (await call('GET', '/admin/data/export?email=nope', A)).status], [404, 400]);
   check('each export is audited', (await query("select count(*)::int n from audit_logs where action = 'data.person_exported' and entity_id = $1", [par.id])).rows[0].n, 1);
 

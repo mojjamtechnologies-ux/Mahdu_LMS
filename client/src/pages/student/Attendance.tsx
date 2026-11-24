@@ -36,13 +36,13 @@ export default function StudentAttendance() {
       <DataState loading={t.loading} error={t.error}>
         {!t.terms.length ? (
           <Card>
-            <Empty>The school has not set up its terms yet.</Empty>
+            <Empty>The school has not set up its semesters yet.</Empty>
           </Card>
         ) : (
           <>
             <div className="mb-6 sm:max-w-xs">
               <Select
-                label="Term"
+                label="Semester"
                 value={termId}
                 onChange={(e) => setPick(e.target.value)}
               >
@@ -57,7 +57,7 @@ export default function StudentAttendance() {
               {s && !s.opened ? (
                 <Card>
                   <Empty>
-                    No attendance has been recorded for you in this term yet.
+                    No attendance has been recorded for you in this semester yet.
                   </Empty>
                 </Card>
               ) : (

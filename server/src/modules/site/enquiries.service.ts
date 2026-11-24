@@ -5,6 +5,7 @@ import { AppError } from '../../utils/AppError';
 import { audit } from '../../services/audit';
 import { sendMail } from '../../services/mailer';
 import { SCHOOL } from '../../config/school';
+import { levelName } from '../../utils/academicNames';
 
 export const STATUS_LABEL: Record<string, string> = {
   received: 'Received', under_review: 'Under review', interview: 'Invited for an interview', offered: 'An offer has been made', declined: 'Not successful this time', withdrawn: 'Withdrawn',
@@ -28,7 +29,7 @@ export async function apply(i: any) {
      values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11, now()) returning id, reference`,
     [i.firstName, i.lastName, i.dateOfBirth, i.classStage, i.classYear, i.previousSchool || null, i.guardianName, i.guardianPhone, i.guardianEmail, i.address || null, i.message || null]);
   const status = await mail(i.guardianEmail, `We received ${i.firstName}'s application to ${SCHOOL.name}`,
-    `Hello ${i.guardianName},\n\nThank you for applying to ${SCHOOL.name} for ${i.firstName} ${i.lastName} (${i.classStage} ${i.classYear}).\n\nYour reference is ${rows[0].reference}. Keep it safe: you will need it, with this email address, to check the progress of the application at ${env.CLIENT_ORIGIN}/admissions/status.\n\nThe school will be in touch.`);
+    `Hello ${i.guardianName},\n\nThank you for applying to ${SCHOOL.name} for ${i.firstName} ${i.lastName} (${levelName(i.classStage, i.classYear)}).\n\nYour reference is ${rows[0].reference}. Keep it safe: you will need it, with this email address, to check the progress of the application at ${env.CLIENT_ORIGIN}/admissions/status.\n\nThe school will be in touch.`);
   await query('update admission_applications set email_status = $2 where id = $1', [rows[0].id, status]);
   return { reference: rows[0].reference as string, emailAccepted: status === 'accepted', duplicate: false };
 }
@@ -37,11 +38,11 @@ export async function apply(i: any) {
 export async function lookup(reference: string, email: string) {
   const r = (await query('select * from admission_applications where reference = $1 and guardian_email = $2', [reference, email])).rows[0];
   if (!r) throw new AppError(404, 'We could not find an application with that reference and email address. Check both and try again.', 'NOT_FOUND');
-  return { reference: r.reference, applicantFirstName: r.first_name, applyingFor: `${r.class_stage} ${r.class_year}`, status: r.status, statusLabel: STATUS_LABEL[r.status], note: r.public_note, submittedAt: r.created_at, updatedAt: r.updated_at };
+  return { reference: r.reference, applicantFirstName: r.first_name, applyingFor: levelName(r.class_stage, r.class_year), status: r.status, statusLabel: STATUS_LABEL[r.status], note: r.public_note, submittedAt: r.created_at, updatedAt: r.updated_at };
 }
 
 const appRow = (r: any, full = false) => ({
-  id: r.id, reference: r.reference, applicantName: `${r.first_name} ${r.last_name}`, applyingFor: `${r.class_stage} ${r.class_year}`, status: r.status, statusLabel: STATUS_LABEL[r.status],
+  id: r.id, reference: r.reference, applicantName: `${r.first_name} ${r.last_name}`, applyingFor: levelName(r.class_stage, r.class_year), status: r.status, statusLabel: STATUS_LABEL[r.status],
   guardianName: r.guardian_name, guardianEmail: r.guardian_email, guardianPhone: r.guardian_phone, submittedAt: r.created_at, emailStatus: r.email_status,
   ...(full ? { dateOfBirth: r.date_of_birth, previousSchool: r.previous_school, address: r.address, message: r.message, publicNote: r.public_note, adminNote: r.admin_note, decidedAt: r.decided_at, consentAt: r.consent_at } : {}),
   convertedStudentId: r.converted_student_id ?? null,
@@ -106,7 +107,7 @@ export async function convertApplication(id: string, i: { email: string; admissi
     if (i.classId) {
       const cls = (await c.query('select stage, year from classes where id = $1', [i.classId])).rows[0];
       if (!cls) throw new AppError(404, 'Class not found', 'NOT_FOUND');
-      if (cls.stage !== a.class_stage || cls.year !== a.class_year) throw new AppError(400, `This applicant applied for ${a.class_stage} ${a.class_year}. Choose a ${a.class_stage} ${a.class_year} class.`, 'VALIDATION_ERROR');
+      if (cls.stage !== a.class_stage || cls.year !== a.class_year) throw new AppError(400, `This applicant applied for ${levelName(a.class_stage, a.class_year)}. Choose a ${levelName(a.class_stage, a.class_year)} class.`, 'VALIDATION_ERROR');
       sessionId = (await c.query('select id from academic_sessions where is_current')).rows[0]?.id ?? null;
       if (!sessionId) throw new AppError(400, 'There is no current session to place the student in. Set one under Sessions and terms.', 'VALIDATION_ERROR');
     }
