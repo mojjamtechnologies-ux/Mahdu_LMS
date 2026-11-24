@@ -4,8 +4,10 @@ import { Paragraphs } from "../../components/Paragraphs";
 import type { SiteData } from "../../lib/types";
 import { usePageTitle } from "../../lib/usePageTitle";
 import { usePublic } from "../../lib/useFetch";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
+  const { t } = useTranslation("public");
   usePageTitle("");
   const s = usePublic<SiteData>("/public/site");
   const d = s.data;
@@ -16,23 +18,23 @@ export default function Home() {
       <section className="bg-brand-500 text-white">
         <div className="mx-auto max-w-5xl px-5 py-16 sm:py-24">
           <h1 className="font-display text-4xl font-bold leading-tight sm:text-6xl">
-            {h.heroTitle}
+            {t("home.heroTitle")}
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-brand-100">
-            {h.heroSubtitle}
+            {t("home.heroSubtitle")}
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               to="/admissions/apply"
               className="rounded-lg bg-gold-400 px-6 py-3 font-semibold text-brand-900 hover:bg-gold-500"
             >
-              Apply for admission
+              {t("home.apply")}
             </Link>
             <Link
               to="/login"
               className="rounded-lg border border-white/70 px-6 py-3 font-semibold hover:bg-white/10"
             >
-              Student, teacher or parent sign in
+              {t("home.signIn")}
             </Link>
           </div>
           <div className="mt-10 h-1.5 w-24 rounded-full bg-gold-400" />
@@ -42,7 +44,7 @@ export default function Home() {
         {d.announcements.length > 0 && (
           <section aria-labelledby="ann-h">
             <h2 id="ann-h" className="mb-3 font-display text-2xl font-bold">
-              Announcements
+              {t("home.announcements")}
             </h2>
             <ul className="space-y-3">
               {d.announcements.map((a) => (
@@ -63,7 +65,7 @@ export default function Home() {
         {h.highlights.length > 0 && (
           <section aria-labelledby="hl-h">
             <h2 id="hl-h" className="mb-4 font-display text-2xl font-bold">
-              Why families choose us
+              {t("home.highlights")}
             </h2>
             <ul className="grid gap-4 sm:grid-cols-3">
               {h.highlights.map((x, i) => (
@@ -82,13 +84,13 @@ export default function Home() {
           <section aria-labelledby="news-h">
             <div className="mb-3 flex items-baseline justify-between">
               <h2 id="news-h" className="font-display text-2xl font-bold">
-                Latest news
+                {t("home.latestNews")}
               </h2>
               <Link
                 className="text-sm font-medium text-brand-700 underline"
                 to="/news"
               >
-                All news
+                {t("home.allNews")}
               </Link>
             </div>
             {d.latestNews.length ? (
@@ -99,20 +101,20 @@ export default function Home() {
               </ul>
             ) : (
               <p className="rounded-lg border border-dashed border-line p-4 text-muted">
-                No news yet. Check back soon.
+                {t("home.noNews")}
               </p>
             )}
           </section>
           <section aria-labelledby="ev-h">
             <div className="mb-3 flex items-baseline justify-between">
               <h2 id="ev-h" className="font-display text-2xl font-bold">
-                Upcoming events
+                {t("home.upcomingEvents")}
               </h2>
               <Link
                 className="text-sm font-medium text-brand-700 underline"
                 to="/news"
               >
-                All events
+                {t("home.allEvents")}
               </Link>
             </div>
             {d.upcomingEvents.length ? (
@@ -123,20 +125,22 @@ export default function Home() {
               </ul>
             ) : (
               <p className="rounded-lg border border-dashed border-line p-4 text-muted">
-                No upcoming events have been announced.
+                {t("home.noEvents")}
               </p>
             )}
           </section>
         </div>
         <section className="rounded-xl bg-brand-50 p-6">
-          <h2 className="font-display text-2xl font-bold">Visit us</h2>
+          <h2 className="font-display text-2xl font-bold">
+            {t("home.visitUs")}
+          </h2>
           <address className="mt-2 not-italic">{d.school.address}</address>
           <p className="mt-3">
             <Link
               className="font-medium text-brand-700 underline"
               to="/contact"
             >
-              See the map and contact details
+              {t("home.mapAndContact")}
             </Link>
           </p>
         </section>

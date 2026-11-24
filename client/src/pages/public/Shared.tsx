@@ -4,6 +4,7 @@ import { Alert } from "../../components/ui";
 import { mediaSrc } from "../../lib/api";
 import { fmtDateTime } from "../../lib/format";
 import type { PubEvent, PubPost } from "../../lib/types";
+import { useTranslation } from "react-i18next";
 
 export const Page = ({
   title,
@@ -38,14 +39,18 @@ export const Loading = ({
 }: {
   error: string;
   loading: boolean;
-}) =>
-  error ? (
+}) => {
+  const { t } = useTranslation("public");
+  return error ? (
     <div className="mx-auto max-w-5xl px-5 py-10">
       <Alert tone="error">{error}</Alert>
     </div>
   ) : loading ? (
-    <p className="mx-auto max-w-5xl px-5 py-10 text-muted">Loading…</p>
+    <p className="mx-auto max-w-5xl px-5 py-10 text-muted">
+      {t("shared.loading")}
+    </p>
   ) : null;
+};
 
 export function PostCard({ p }: { p: PubPost }) {
   return (

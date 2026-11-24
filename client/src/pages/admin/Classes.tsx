@@ -162,7 +162,7 @@ export default function Classes() {
                   <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
                     {subjects.data.map((s) => (
                       <label key={s.id} className="flex items-center gap-2 rounded-lg border border-line px-3 py-2 text-sm">
-                        <input type="checkbox" checked={checked.has(s.id)} onChange={() => toggle(s.id)} className="h-4 w-4 accent-[#438f17]" />
+                        <input type="checkbox" checked={checked.has(s.id)} onChange={() => toggle(s.id)} className="h-4 w-4 accent-brand-600" />
                         {s.name}
                       </label>
                     ))}

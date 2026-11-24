@@ -5,9 +5,11 @@ import { SmallButton } from "../../components/ui";
 import type { PubEvent, PubPost } from "../../lib/types";
 import { usePageTitle } from "../../lib/usePageTitle";
 import { usePublic } from "../../lib/useFetch";
+import { useTranslation } from "react-i18next";
 
 export default function News() {
-  usePageTitle("News and events");
+  const { t } = useTranslation("public");
+  usePageTitle(t("news.title"));
   const [size, setSize] = useState(9);
   const [past, setPast] = useState(false);
   const ann = usePublic<(PubPost & { body: string })[]>(
@@ -20,11 +22,11 @@ export default function News() {
   );
   if (!news.data) return <Loading loading={news.loading} error={news.error} />;
   return (
-    <Page title="News and events">
+    <Page title={t("news.title")}>
       {!!ann.data?.length && (
         <section aria-labelledby="a-h">
           <h2 id="a-h" className="mb-3 font-display text-2xl font-bold">
-            Announcements
+            {t("news.announcements")}
           </h2>
           <ul className="space-y-3">
             {ann.data.map((a) => (
@@ -45,7 +47,7 @@ export default function News() {
       )}
       <section aria-labelledby="e-h">
         <h2 id="e-h" className="mb-3 font-display text-2xl font-bold">
-          Upcoming events
+          {t("news.upcoming")}
         </h2>
         {up.data?.length ? (
           <ul className="space-y-3">
@@ -55,17 +57,17 @@ export default function News() {
           </ul>
         ) : (
           <p className="rounded-lg border border-dashed border-line p-4 text-muted">
-            No upcoming events have been announced.
+            {t("news.noUpcoming")}
           </p>
         )}
         <div className="mt-3">
           {!past ? (
             <SmallButton onClick={() => setPast(true)}>
-              Show earlier events
+              {t("news.showEarlierEvents")}
             </SmallButton>
           ) : (
             <>
-              <h3 className="mb-2 mt-4 font-semibold">Earlier events</h3>
+              <h3 className="mb-2 mt-4 font-semibold">{t("news.earlier")}</h3>
               {old.data?.length ? (
                 <ul className="space-y-3">
                   {old.data.map((e, i) => (
@@ -73,7 +75,7 @@ export default function News() {
                   ))}
                 </ul>
               ) : (
-                <p className="text-muted">No earlier events.</p>
+                <p className="text-muted">{t("news.noEarlier")}</p>
               )}
             </>
           )}
@@ -81,7 +83,7 @@ export default function News() {
       </section>
       <section aria-labelledby="n-h">
         <h2 id="n-h" className="mb-3 font-display text-2xl font-bold">
-          News
+          {t("news.news")}
         </h2>
         {news.data.items.length ? (
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -91,13 +93,13 @@ export default function News() {
           </ul>
         ) : (
           <p className="rounded-lg border border-dashed border-line p-4 text-muted">
-            No news yet. Check back soon.
+            {t("news.noNews")}
           </p>
         )}
         {news.data.total > news.data.items.length && (
           <div className="mt-4">
             <SmallButton onClick={() => setSize((s) => s + 9)}>
-              Show older news
+              {t("news.older")}
             </SmallButton>
           </div>
         )}

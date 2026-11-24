@@ -5,14 +5,16 @@ import { METHOD_LABEL } from "../components/FeeBits";
 import { fmtDateTime, naira } from "../lib/format";
 import type { Receipt } from "../lib/types";
 import { useFetch } from "../lib/useFetch";
+import { useTranslation } from "react-i18next";
+import { schoolNameOf } from "../i18n";
 
 // Only the school details the school itself supplied are printed here. Phone and email will be added once provided.
 const SCHOOL = {
-  name: "[School Name]",
-  address: "[School Address]",
+  address: "",
 };
 
 export default function ReceiptPage({ backTo }: { backTo: string }) {
+  const { i18n } = useTranslation();
   const { id = "" } = useParams();
   const r = useFetch<Receipt>(`/fees/payments/${id}/receipt`);
   const d = r.data;
@@ -45,10 +47,12 @@ export default function ReceiptPage({ backTo }: { backTo: string }) {
           <div className="max-w-xl">
             <Card>
               <div className="border-b-4 border-gold-400 pb-4 text-center">
-                <p className="font-display text-2xl font-bold">{SCHOOL.name}</p>
+                <p className="font-display text-2xl font-bold">
+                  {schoolNameOf(i18n.language)}
+                </p>
                 <p className="text-sm text-muted">{SCHOOL.address}</p>
                 <p className="mt-3 text-lg font-semibold uppercase tracking-wide">
-                  Payment receipt
+                  {i18n.t("Payment receipt")}
                 </p>
               </div>
               {d.reversed && (

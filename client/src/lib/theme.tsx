@@ -20,7 +20,7 @@ function apply(p: ThemePref) {
   const root = document.documentElement;
   root.classList.toggle("dark", t === "dark");
   root.style.colorScheme = t;
-  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", t === "dark" ? "#0f1510" : "#438f17");
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", t === "dark" ? "#0d1024" : "#19235c");
 }
 
 interface ThemeState {

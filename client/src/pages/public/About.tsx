@@ -3,30 +3,32 @@ import { Paragraphs } from "../../components/Paragraphs";
 import type { SiteData } from "../../lib/types";
 import { usePageTitle } from "../../lib/usePageTitle";
 import { usePublic } from "../../lib/useFetch";
+import { useTranslation } from "react-i18next";
 
 export default function About() {
-  usePageTitle("About us");
+  const { t } = useTranslation("public");
+  usePageTitle(t("about.title"));
   const s = usePublic<SiteData>("/public/site");
   if (!s.data) return <Loading loading={s.loading} error={s.error} />;
   const a = s.data.content.about;
   return (
-    <Page title="About us">
-      <Block title="Who we are">
+    <Page title={t("about.title")}>
+      <Block title={t("about.who")}>
         <Paragraphs text={a.overview} />
       </Block>
       <div className="grid gap-8 md:grid-cols-2">
-        <Block title="Our mission">
+        <Block title={t("about.mission")}>
           <Paragraphs text={a.mission} />
         </Block>
-        <Block title="Our vision">
+        <Block title={t("about.vision")}>
           <Paragraphs text={a.vision} />
         </Block>
       </div>
-      <Block title="Our educational philosophy">
+      <Block title={t("about.philosophy")}>
         <Paragraphs text={a.philosophy} />
       </Block>
       {a.values.length > 0 && (
-        <Block title="Our values">
+        <Block title={t("about.values")}>
           <ul className="grid gap-4 sm:grid-cols-3">
             {a.values.map((v, i) => (
               <li
@@ -41,7 +43,7 @@ export default function About() {
         </Block>
       )}
       {a.leadership.length > 0 && (
-        <Block title="Leadership">
+        <Block title={t("about.leadership")}>
           <ul className="grid gap-4 sm:grid-cols-2">
             {a.leadership.map((l, i) => (
               <li

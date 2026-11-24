@@ -7,6 +7,7 @@ import { useAction, useFetch } from '../lib/useFetch';
 interface Item { position: number; dueDate: string; amountKobo: number; paidKobo: number; remainingKobo: number; status: 'paid' | 'partial' | 'overdue' | 'upcoming' }
 interface Plan { invoiceId: string; number: string; invoiceOpen: boolean; totalKobo: number; paidKobo: number; outstandingKobo: number; hasPlan: boolean; outOfDate: boolean; planTotalKobo: number; instalments: Item[]; next: { dueDate: string; remainingKobo: number; status: string } | null }
 interface Draft { dueDate: string; naira: string }
+interface Suggestion { instalments: { dueDate: string; amountKobo: number }[] }
 const tone = (s: Item['status']) => (s === 'paid' ? 'good' : s === 'overdue' || s === 'partial' ? 'warn' : undefined);
 const label: Record<Item['status'], string> = { paid: 'Paid', partial: 'Part paid', overdue: 'Overdue', upcoming: 'Upcoming' };
 const kobo = (v: string) => toKobo(v) ?? 0; // your toKobo returns null for text that is not an amount
@@ -25,9 +26,9 @@ export default function InstalmentPlan({ invoiceId, role }: { invoiceId: string;
   const sum = rows.reduce((n, r) => n + kobo(r.naira), 0);
 
   const suggest = async () => {
-    let got: { instalments: { dueDate: string; amountKobo: number }[] } | null = null;
-    const ok = await act.run(async () => { got = await api(`${base}/suggest?count=${count}&firstDue=${first}&gapDays=${gap}`); });
-    if (ok && got) setRows((got as typeof got).instalments.map((i) => ({ dueDate: i.dueDate, naira: nairaInput(i.amountKobo) })));
+    let got: Suggestion | null = null;
+    const ok = await act.run(async () => { got = await api<Suggestion>(`${base}/suggest?count=${count}&firstDue=${first}&gapDays=${gap}`); });
+    if (ok && got) setRows(got.instalments.map((i) => ({ dueDate: i.dueDate, naira: nairaInput(i.amountKobo) })));
   };
   const save = async () => { if (await act.run(() => api(base, { method: 'PUT', body: { instalments: rows.map((r) => ({ dueDate: r.dueDate, amountKobo: kobo(r.naira) })) } }))) { setEditing(false); d.reload(); } };
   const clear = async () => { if (window.confirm('Remove the instalment plan? Payments already recorded are not affected.') && await act.run(() => api(base, { method: 'DELETE' }))) d.reload(); };

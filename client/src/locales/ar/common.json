@@ -1,18 +1,71 @@
 {
   "actions": {
-    "save": "حفظ", "cancel": "إلغاء", "close": "إغلاق", "edit": "تعديل", "delete": "حذف", "signOut": "تسجيل الخروج", "menu": "القائمة",
-    "search": "بحث", "previous": "السابق", "next": "التالي", "download": "تنزيل", "print": "طباعة", "remove": "إزالة",
-    "upload": "رفع", "replace": "استبدال", "preview": "معاينة", "confirm": "تأكيد", "reset": "إعادة تعيين", "back": "رجوع"
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "close": "إغلاق",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "signOut": "تسجيل الخروج",
+    "menu": "القائمة",
+    "search": "بحث",
+    "previous": "السابق",
+    "next": "التالي",
+    "download": "تنزيل",
+    "print": "طباعة",
+    "remove": "إزالة",
+    "upload": "رفع",
+    "replace": "استبدال",
+    "preview": "معاينة",
+    "confirm": "تأكيد",
+    "reset": "إعادة تعيين",
+    "back": "رجوع"
   },
-  "states": { "loading": "جارٍ التحميل…", "pleaseWait": "يرجى الانتظار…", "preparing": "جارٍ التجهيز…", "saved": "تم الحفظ.", "none": "لا يوجد" },
-  "theme": { "label": "المظهر", "light": "فاتح", "dark": "داكن", "system": "حسب النظام (تلقائي)" },
+  "states": {
+    "loading": "جارٍ التحميل…",
+    "pleaseWait": "يرجى الانتظار…",
+    "preparing": "جارٍ التحضير…",
+    "saved": "تم الحفظ.",
+    "none": "لا يوجد"
+  },
+  "theme": {
+    "label": "المظهر",
+    "light": "فاتح",
+    "dark": "داكن",
+    "system": "حسب النظام (تلقائي)"
+  },
   "language": { "label": "اللغة", "en": "English", "ar": "العربية" },
-  "roles": { "admin": "مسؤول", "teacher": "معلم", "student": "طالب", "parent": "ولي أمر" },
-  "shell": { "notices": "الإشعارات", "notifications": "الإشعارات", "unread": "{{count}} غير مقروء", "skip": "تخطي إلى المحتوى", "preferences": "تفضيلات العرض", "mainMenu": "الرئيسية" },
-  "pagination": { "page": "الصفحة {{page}} من {{pages}}", "showing": "عرض {{shown}} من {{total}}" },
+  "roles": {
+    "admin": "مسؤول",
+    "teacher": "معلم",
+    "student": "طالب",
+    "parent": "ولي أمر"
+  },
+  "shell": {
+    "notices": "الإشعارات",
+    "notifications": "الإشعارات",
+    "unread": "{{count}} غير مقروء",
+    "skip": "تخطي إلى المحتوى",
+    "preferences": "تفضيلات العرض",
+    "mainMenu": "الرئيسية"
+  },
+  "pagination": {
+    "page": "الصفحة {{page}} من {{pages}}",
+    "showing": "عرض {{shown}} من {{total}}"
+  },
   "public": {
-    "signIn": "تسجيل الدخول", "getInTouch": "تواصل معنا", "quickLinks": "روابط سريعة", "phone": "الهاتف", "email": "البريد الإلكتروني",
-    "contactPage": "صفحة التواصل والخريطة", "apply": "التقديم للقبول", "checkApplication": "متابعة طلب التقديم",
-    "privacy": "إشعار الخصوصية", "portalSignIn": "تسجيل دخول الطلاب والمعلمين وأولياء الأمور"
+    "signIn": "تسجيل الدخول",
+    "loggedIn": "أنت مسجل الدخول",
+    "loggedInAs": "مسجل الدخول: {{name}}",
+    "account": "الحساب",
+    "backToWebsite": "العودة إلى الموقع",
+    "getInTouch": "تواصل معنا",
+    "quickLinks": "روابط سريعة",
+    "phone": "الهاتف",
+    "email": "البريد الإلكتروني",
+    "contactPage": "صفحة التواصل والخريطة",
+    "apply": "التقديم للقبول",
+    "checkApplication": "متابعة طلب التقديم",
+    "privacy": "إشعار الخصوصية",
+    "portalSignIn": "تسجيل دخول الطلاب والمعلمين وأولياء الأمور"
   }
 }

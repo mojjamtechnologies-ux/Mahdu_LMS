@@ -6,17 +6,27 @@ import enAuth from "../locales/en/auth.json";
 import enProfile from "../locales/en/profile.json";
 import enIdcards from "../locales/en/idcards.json";
 import enClasses from "../locales/en/classes.json";
+import enPublic from "../locales/en/public.json";
+import enAdmin from "../locales/en/admin.json";
 import arCommon from "../locales/ar/common.json";
 import arNav from "../locales/ar/nav.json";
 import arAuth from "../locales/ar/auth.json";
 import arProfile from "../locales/ar/profile.json";
 import arIdcards from "../locales/ar/idcards.json";
 import arClasses from "../locales/ar/classes.json";
+import arPublic from "../locales/ar/public.json";
+import arAdmin from "../locales/ar/admin.json";
 
 export const LANGS = ["en", "ar"] as const;
 export type Lang = (typeof LANGS)[number];
 const KEY = "mr_lang"; // independent of the theme setting (mr_theme)
 export const dirOf = (l: string) => (l === "ar" ? "rtl" : "ltr");
+export const SCHOOL_NAME = {
+  en: "Mahdu Rahmah",
+  ar: "معهد الرحمة الإسلامي",
+} as const;
+export const schoolNameOf = (l: string) =>
+  l === "ar" ? SCHOOL_NAME.ar : SCHOOL_NAME.en;
 
 const stored = (): Lang => {
   try {
@@ -37,11 +47,38 @@ function applyDocument(l: string) {
 void i18n.use(initReactI18next).init({
   lng: stored(),
   fallbackLng: "en",
-  ns: ["common", "nav", "auth", "profile", "idcards", "classes"],
+  ns: [
+    "common",
+    "nav",
+    "auth",
+    "profile",
+    "idcards",
+    "classes",
+    "public",
+    "admin",
+  ],
   defaultNS: "common",
   resources: {
-    en: { common: enCommon, nav: enNav, auth: enAuth, profile: enProfile, idcards: enIdcards, classes: enClasses },
-    ar: { common: arCommon, nav: arNav, auth: arAuth, profile: arProfile, idcards: arIdcards, classes: arClasses },
+    en: {
+      common: enCommon,
+      nav: enNav,
+      auth: enAuth,
+      profile: enProfile,
+      idcards: enIdcards,
+      classes: enClasses,
+      public: enPublic,
+      admin: enAdmin,
+    },
+    ar: {
+      common: arCommon,
+      nav: arNav,
+      auth: arAuth,
+      profile: arProfile,
+      idcards: arIdcards,
+      classes: arClasses,
+      public: arPublic,
+      admin: arAdmin,
+    },
   },
   interpolation: { escapeValue: false }, // React already escapes
   returnNull: false,
@@ -50,11 +87,19 @@ applyDocument(i18n.language);
 i18n.on("languageChanged", applyDocument);
 
 export function setLanguage(l: Lang) {
-  try { localStorage.setItem(KEY, l); } catch { /* private mode */ }
+  try {
+    localStorage.setItem(KEY, l);
+  } catch {
+    /* private mode */
+  }
   void i18n.changeLanguage(l);
 }
 
 export default i18n;
 
 /** Translation key for a navigation label written in English, e.g. "Sessions and terms" -> "nav:sessions_and_terms". */
-export const navKey = (label: string) => `nav:${label.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "")}`;
+export const navKey = (label: string) =>
+  `nav:${label
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/^_|_$/g, "")}`;

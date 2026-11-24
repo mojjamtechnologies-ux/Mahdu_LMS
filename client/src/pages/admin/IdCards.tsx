@@ -189,13 +189,13 @@ function PeopleTab({ tpl, notify }: { tpl: CardTemplate; notify: (m: string, ton
             {rows.length === 0 ? <Empty>{t("table.empty")}</Empty> : (
               <Table>
                 <thead><tr>
-                  <Th><input type="checkbox" aria-label={t("table.selectAll")} checked={allOnPage} onChange={toggleAll} className="h-4 w-4 accent-[#438f17]" /></Th>
+                  <Th><input type="checkbox" aria-label={t("table.selectAll")} checked={allOnPage} onChange={toggleAll} className="h-4 w-4 accent-brand-500" /></Th>
                   <Th>{t("table.person")}</Th><Th>{t("table.id")}</Th><Th>{t("table.card")}</Th><Th>{t("table.actions")}</Th>
                 </tr></thead>
                 <tbody>
                   {rows.map((r) => (
                     <tr key={r.id}>
-                      <Td><input type="checkbox" aria-label={t("table.select", { name: r.name })} checked={sel.has(r.id)} onChange={() => toggle(r)} className="h-4 w-4 accent-[#438f17]" /></Td>
+                      <Td><input type="checkbox" aria-label={t("table.select", { name: r.name })} checked={sel.has(r.id)} onChange={() => toggle(r)} className="h-4 w-4 accent-brand-500" /></Td>
                       <Td>
                         <div className="flex items-center gap-3">
                           <Avatar userId={r.id} name={r.name} version={r.avatarVersion} size={36} />
@@ -380,7 +380,7 @@ function TemplateTab({ tpl, onSaved }: { tpl: CardTemplate; onSaved: () => void 
             <div className="grid gap-2 sm:grid-cols-3">
               {toggles.map(([k, label]) => (
                 <label key={k} className="flex items-center gap-2 rounded-lg border border-line px-3 py-2 text-sm">
-                  <input type="checkbox" checked={f.show[k]} onChange={(e) => setShow(k, e.target.checked)} className="h-4 w-4 accent-[#438f17]" />{t(`template.${label}`)}
+                  <input type="checkbox" checked={f.show[k]} onChange={(e) => setShow(k, e.target.checked)} className="h-4 w-4 accent-brand-500" />{t(`template.${label}`)}
                 </label>
               ))}
             </div>

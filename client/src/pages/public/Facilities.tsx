@@ -4,21 +4,20 @@ import { mediaSrc } from "../../lib/api";
 import type { PubFacility, PubGalleryImage } from "../../lib/types";
 import { usePageTitle } from "../../lib/usePageTitle";
 import { usePublic } from "../../lib/useFetch";
+import { useTranslation } from "react-i18next";
 
 export default function Facilities() {
-  usePageTitle("Facilities");
+  const { t } = useTranslation("public");
+  usePageTitle(t("facilities.title"));
   const f = usePublic<PubFacility[]>("/public/facilities");
   const g = usePublic<PubGalleryImage[]>("/public/gallery");
   if (!f.data) return <Loading loading={f.loading} error={f.error} />;
   const cats = [...new Set(f.data.map((x) => x.category))];
   return (
-    <Page
-      title="Facilities"
-      intro="A look at the spaces where our pupils learn, play and grow."
-    >
+    <Page title={t("facilities.title")} intro={t("facilities.intro")}>
       {cats.length === 0 && (
         <p className="rounded-lg border border-dashed border-line p-6 text-muted">
-          Information about our facilities is coming soon.
+          {t("facilities.comingSoon")}
         </p>
       )}
       {cats.map((c) => (
@@ -66,7 +65,7 @@ export default function Facilities() {
         </Block>
       ))}
       {!!g.data?.length && (
-        <Block title="Photo gallery">
+        <Block title={t("facilities.gallery")}>
           <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             {g.data.map((im, i) => (
               <li key={i}>

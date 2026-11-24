@@ -6,9 +6,11 @@ import { fmtDateTime } from "../../lib/format";
 import type { AppStatus } from "../../lib/types";
 import { usePageTitle } from "../../lib/usePageTitle";
 import { useAction } from "../../lib/useFetch";
+import { useTranslation } from "react-i18next";
 
 export default function AdmissionStatus() {
-  usePageTitle("Check an application");
+  const { t } = useTranslation("public");
+  usePageTitle(t("status.title"));
   const [reference, setReference] = useState("");
   const [email, setEmail] = useState("");
   const [r, setR] = useState<AppStatus | null>(null);
@@ -28,13 +30,10 @@ export default function AdmissionStatus() {
       setR(data!);
   }
   return (
-    <Page
-      title="Check an application"
-      intro="Enter the reference we gave you and the email address used on the application."
-    >
+    <Page title={t("status.title")} intro={t("status.intro")}>
       <form onSubmit={submit} className="grid max-w-md gap-4" noValidate>
         <Field
-          label="Reference"
+          label={t("status.reference")}
           placeholder="KOK-APP-000123"
           autoCapitalize="characters"
           value={reference}
@@ -42,7 +41,7 @@ export default function AdmissionStatus() {
           onChange={(e) => setReference(e.target.value)}
         />
         <Field
-          label="Email address"
+          label={t("status.email")}
           type="email"
           value={email}
           error={act.fields.email}
@@ -52,13 +51,16 @@ export default function AdmissionStatus() {
           <Alert tone="error">{act.error}</Alert>
         )}
         <Button type="submit" loading={act.busy}>
-          Check progress
+          {t("status.check")}
         </Button>
       </form>
       {r && (
         <div className="max-w-xl">
           <Card
-            title={`${r.applicantFirstName}'s application for ${r.applyingFor}`}
+            title={t("status.applicationFor", {
+              name: r.applicantFirstName,
+              class: r.applyingFor,
+            })}
           >
             <p className="text-lg">
               <Badge
@@ -79,8 +81,11 @@ export default function AdmissionStatus() {
               </p>
             )}
             <p className="mt-3 text-sm text-muted">
-              Reference {r.reference} · received {fmtDateTime(r.submittedAt)} ·
-              last updated {fmtDateTime(r.updatedAt)}
+              {t("status.referenceReceived", {
+                reference: r.reference,
+                received: fmtDateTime(r.submittedAt),
+                updated: fmtDateTime(r.updatedAt),
+              })}
             </p>
           </Card>
         </div>

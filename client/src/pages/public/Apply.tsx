@@ -5,6 +5,7 @@ import { Alert, Button, Field, Select, TextArea } from "../../components/ui";
 import { api } from "../../lib/api";
 import { usePageTitle } from "../../lib/usePageTitle";
 import { useAction } from "../../lib/useFetch";
+import { useTranslation } from "react-i18next";
 
 const EMPTY = {
   firstName: "",
@@ -24,7 +25,8 @@ const CLASSES = ["JSS|1", "JSS|2", "JSS|3", "SSS|1", "SSS|2", "SSS|3"];
 
 // A short form that asks only for what the school needs to consider the application.
 export default function Apply() {
-  usePageTitle("Apply for admission");
+  const { t } = useTranslation("public");
+  usePageTitle(t("apply.title"));
   const [f, setF] = useState(EMPTY);
   const act = useAction();
   const [done, setDone] = useState<{
@@ -63,39 +65,34 @@ export default function Apply() {
 
   if (done) {
     return (
-      <Page title="Application received">
+      <Page title={t("apply.received")}>
         <div className="max-w-2xl space-y-4">
           {done.reference ? (
             <>
               <Alert tone="success">
-                {done.duplicate
-                  ? "We already had this application, so nothing new was created."
-                  : "Thank you. Your application has been received."}
+                {done.duplicate ? t("apply.duplicate") : t("apply.thankYou")}
               </Alert>
               <p>
-                Your reference is{" "}
-                <strong className="text-xl">{done.reference}</strong>. Please
-                write it down: you need it, with the guardian's email address,
-                to check progress.
+                {t("apply.referencePrefix")}{" "}
+                <strong className="text-xl">{done.reference}</strong>.{" "}
+                {t("apply.referenceHelp")}
               </p>
               <p className="text-muted">
                 {done.emailAccepted
-                  ? "We have also sent it to the guardian's email address."
-                  : "We could not send a confirmation email, so please keep the reference above."}
+                  ? t("apply.emailSent")
+                  : t("apply.emailNotSent")}
               </p>
               <p>
                 <Link
                   className="font-medium text-brand-700 underline"
                   to="/admissions/status"
                 >
-                  Check an application
+                  {t("apply.check")}
                 </Link>
               </p>
             </>
           ) : (
-            <Alert tone="success">
-              Thank you. Your application has been received.
-            </Alert>
+            <Alert tone="success">{t("apply.thankYou")}</Alert>
           )}
         </div>
       </Page>
@@ -103,38 +100,35 @@ export default function Apply() {
   }
   const er = act.fields;
   return (
-    <Page
-      title="Apply for admission"
-      intro="Please fill in this form for one child. A parent or guardian should complete it."
-    >
+    <Page title={t("apply.title")} intro={t("apply.intro")}>
       <form onSubmit={submit} className="grid max-w-3xl gap-5" noValidate>
         <fieldset className="grid gap-4 sm:grid-cols-2">
           <legend className="mb-2 font-display text-xl font-bold">
-            The child
+            {t("apply.child")}
           </legend>
           <Field
-            label="First name"
+            label={t("apply.firstName")}
             autoComplete="off"
             value={f.firstName}
             error={er.firstName}
             onChange={(e) => set("firstName", e.target.value)}
           />
           <Field
-            label="Last name"
+            label={t("apply.lastName")}
             autoComplete="off"
             value={f.lastName}
             error={er.lastName}
             onChange={(e) => set("lastName", e.target.value)}
           />
           <Field
-            label="Date of birth"
+            label={t("apply.dob")}
             type="date"
             value={f.dateOfBirth}
             error={er.dateOfBirth}
             onChange={(e) => set("dateOfBirth", e.target.value)}
           />
           <Select
-            label="Class applying for"
+            label={t("apply.class")}
             value={f.klass}
             error={er.classStage ?? er.classYear}
             onChange={(e) => set("klass", e.target.value)}
@@ -147,7 +141,7 @@ export default function Apply() {
           </Select>
           <div className="sm:col-span-2">
             <Field
-              label="Previous school (optional)"
+              label={t("apply.previousSchool")}
               value={f.previousSchool}
               error={er.previousSchool}
               onChange={(e) => set("previousSchool", e.target.value)}
@@ -156,17 +150,17 @@ export default function Apply() {
         </fieldset>
         <fieldset className="grid gap-4 sm:grid-cols-2">
           <legend className="mb-2 font-display text-xl font-bold">
-            Parent or guardian
+            {t("apply.guardian")}
           </legend>
           <Field
-            label="Full name"
+            label={t("apply.fullName")}
             autoComplete="name"
             value={f.guardianName}
             error={er.guardianName}
             onChange={(e) => set("guardianName", e.target.value)}
           />
           <Field
-            label="Phone number"
+            label={t("apply.phone")}
             type="tel"
             autoComplete="tel"
             value={f.guardianPhone}
@@ -175,18 +169,18 @@ export default function Apply() {
           />
           <div className="sm:col-span-2">
             <Field
-              label="Email address"
+              label={t("apply.email")}
               type="email"
               autoComplete="email"
               value={f.guardianEmail}
               error={er.guardianEmail}
-              hint="We send the reference and any updates to this address."
+              hint={t("apply.emailHint")}
               onChange={(e) => set("guardianEmail", e.target.value)}
             />
           </div>
           <div className="sm:col-span-2">
             <Field
-              label="Home address (optional)"
+              label={t("apply.address")}
               autoComplete="street-address"
               value={f.address}
               error={er.address}
@@ -195,7 +189,7 @@ export default function Apply() {
           </div>
         </fieldset>
         <TextArea
-          label="Anything else you would like us to know (optional)"
+          label={t("apply.message")}
           rows={4}
           value={f.message}
           error={er.message}
@@ -206,7 +200,7 @@ export default function Apply() {
           className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
         >
           <label>
-            Leave this empty
+            {t("apply.leaveEmpty")}
             <input
               tabIndex={-1}
               autoComplete="off"
@@ -225,15 +219,13 @@ export default function Apply() {
               aria-invalid={!!er.consent}
             />
             <span>
-              I am the child's parent or guardian. I agree that the school may
-              use these details to consider this application and contact me
-              about it, as explained in the{" "}
+              {t("apply.consent")}{" "}
               <Link
                 className="font-medium text-brand-700 underline"
                 to="/privacy"
                 target="_blank"
               >
-                privacy notice
+                {t("apply.privacy")}
               </Link>
               .
             </span>
@@ -245,7 +237,7 @@ export default function Apply() {
         {act.error && <Alert tone="error">{act.error}</Alert>}
         <div className="max-w-xs">
           <Button type="submit" loading={act.busy}>
-            Send application
+            {t("apply.send")}
           </Button>
         </div>
       </form>

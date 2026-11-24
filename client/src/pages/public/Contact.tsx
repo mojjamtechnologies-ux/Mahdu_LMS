@@ -6,6 +6,7 @@ import { api } from "../../lib/api";
 import type { SiteData } from "../../lib/types";
 import { usePageTitle } from "../../lib/usePageTitle";
 import { useAction, usePublic } from "../../lib/useFetch";
+import { useTranslation } from "react-i18next";
 
 const EMPTY = {
   name: "",
@@ -18,7 +19,8 @@ const EMPTY = {
 };
 
 export default function Contact() {
-  usePageTitle("Contact us");
+  const { t } = useTranslation("public");
+  usePageTitle(t("contact.title"));
   const s = usePublic<SiteData>("/public/site");
   const [f, setF] = useState(EMPTY);
   const act = useAction();
@@ -46,11 +48,11 @@ export default function Contact() {
   }
   const er = act.fields;
   return (
-    <Page title="Contact us">
+    <Page title={t("contact.title")}>
       <div className="grid gap-8 lg:grid-cols-2">
         <section aria-labelledby="find-h">
           <h2 id="find-h" className="mb-3 font-display text-2xl font-bold">
-            Find us
+            {t("contact.find")}
           </h2>
           <address className="not-italic">
             {school.name}
@@ -60,7 +62,7 @@ export default function Contact() {
           <ul className="mt-3 space-y-1">
             {contact.phone && (
               <li>
-                Phone:{" "}
+                {t("contact.phone")}:{" "}
                 <a
                   className="font-medium text-brand-700 underline"
                   href={`tel:${contact.phone.replace(/\s/g, "")}`}
@@ -69,10 +71,14 @@ export default function Contact() {
                 </a>
               </li>
             )}
-            {contact.whatsapp && <li>WhatsApp: {contact.whatsapp}</li>}
+            {contact.whatsapp && (
+              <li>
+                {t("contact.whatsapp")}: {contact.whatsapp}
+              </li>
+            )}
             {contact.email && (
               <li>
-                Email:{" "}
+                {t("contact.email")}:{" "}
                 <a
                   className="font-medium text-brand-700 underline"
                   href={`mailto:${contact.email}`}
@@ -105,7 +111,7 @@ export default function Contact() {
               target="_blank"
               rel="noreferrer"
             >
-              Open in Google Maps
+              {t("contact.openMap")}
             </a>
             <a
               className="font-medium text-brand-700 underline"
@@ -113,33 +119,28 @@ export default function Contact() {
               target="_blank"
               rel="noreferrer"
             >
-              Get directions
+              {t("contact.directions")}
             </a>
           </p>
-          <p className="mt-2 text-xs text-muted">
-            The map searches for our address. It does not ask for your location.
-          </p>
+          <p className="mt-2 text-xs text-muted">{t("contact.mapNote")}</p>
         </section>
         <section aria-labelledby="msg-h">
           <h2 id="msg-h" className="mb-3 font-display text-2xl font-bold">
-            Send us a message
+            {t("contact.sendUs")}
           </h2>
           {sent ? (
-            <Alert tone="success">
-              Thank you. Your message has been received and the school will
-              reply to your email address.
-            </Alert>
+            <Alert tone="success">{t("contact.sent")}</Alert>
           ) : (
             <form onSubmit={submit} className="grid gap-4" noValidate>
               <Field
-                label="Your name"
+                label={t("contact.name")}
                 autoComplete="name"
                 value={f.name}
                 error={er.name}
                 onChange={(e) => set("name", e.target.value)}
               />
               <Field
-                label="Email address"
+                label={t("contact.emailAddress")}
                 type="email"
                 autoComplete="email"
                 value={f.email}
@@ -147,7 +148,7 @@ export default function Contact() {
                 onChange={(e) => set("email", e.target.value)}
               />
               <Field
-                label="Phone number (optional)"
+                label={t("contact.phoneOptional")}
                 type="tel"
                 autoComplete="tel"
                 value={f.phone}
@@ -155,13 +156,13 @@ export default function Contact() {
                 onChange={(e) => set("phone", e.target.value)}
               />
               <Field
-                label="Subject"
+                label={t("contact.subject")}
                 value={f.subject}
                 error={er.subject}
                 onChange={(e) => set("subject", e.target.value)}
               />
               <TextArea
-                label="Message"
+                label={t("contact.message")}
                 rows={6}
                 value={f.message}
                 error={er.message}
@@ -172,7 +173,7 @@ export default function Contact() {
                 className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
               >
                 <label>
-                  Leave this empty
+                  {t("contact.leaveEmpty")}
                   <input
                     tabIndex={-1}
                     autoComplete="off"
@@ -190,14 +191,13 @@ export default function Contact() {
                     onChange={(e) => set("consent", e.target.checked)}
                   />
                   <span>
-                    I agree that the school may use these details to reply to
-                    me, as explained in the{" "}
+                    {t("contact.consent")}{" "}
                     <Link
                       className="font-medium text-brand-700 underline"
                       to="/privacy"
                       target="_blank"
                     >
-                      privacy notice
+                      {t("contact.privacy")}
                     </Link>
                     .
                   </span>
@@ -209,7 +209,7 @@ export default function Contact() {
               {act.error && <Alert tone="error">{act.error}</Alert>}
               <div className="max-w-xs">
                 <Button type="submit" loading={act.busy}>
-                  Send message
+                  {t("contact.send")}
                 </Button>
               </div>
             </form>

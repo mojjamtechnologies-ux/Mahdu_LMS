@@ -1,18 +1,71 @@
 {
   "actions": {
-    "save": "Save", "cancel": "Cancel", "close": "Close", "edit": "Edit", "delete": "Delete", "signOut": "Sign out", "menu": "Menu",
-    "search": "Search", "previous": "Previous", "next": "Next", "download": "Download", "print": "Print", "remove": "Remove",
-    "upload": "Upload", "replace": "Replace", "preview": "Preview", "confirm": "Confirm", "reset": "Reset", "back": "Back"
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "edit": "Edit",
+    "delete": "Delete",
+    "signOut": "Sign out",
+    "menu": "Menu",
+    "search": "Search",
+    "previous": "Previous",
+    "next": "Next",
+    "download": "Download",
+    "print": "Print",
+    "remove": "Remove",
+    "upload": "Upload",
+    "replace": "Replace",
+    "preview": "Preview",
+    "confirm": "Confirm",
+    "reset": "Reset",
+    "back": "Back"
   },
-  "states": { "loading": "Loading…", "pleaseWait": "Please wait…", "preparing": "Preparing…", "saved": "Saved.", "none": "None" },
-  "theme": { "label": "Theme", "light": "Light", "dark": "Dark", "system": "System (automatic)" },
+  "states": {
+    "loading": "Loading…",
+    "pleaseWait": "Please wait…",
+    "preparing": "Preparing…",
+    "saved": "Saved.",
+    "none": "None"
+  },
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System (automatic)"
+  },
   "language": { "label": "Language", "en": "English", "ar": "العربية" },
-  "roles": { "admin": "Administrator", "teacher": "Teacher", "student": "Student", "parent": "Parent or guardian" },
-  "shell": { "notices": "Notices", "notifications": "Notifications", "unread": "{{count}} unread", "skip": "Skip to content", "preferences": "Display preferences", "mainMenu": "Main" },
-  "pagination": { "page": "Page {{page}} of {{pages}}", "showing": "Showing {{shown}} of {{total}}" },
+  "roles": {
+    "admin": "Administrator",
+    "teacher": "Teacher",
+    "student": "Student",
+    "parent": "Parent or guardian"
+  },
+  "shell": {
+    "notices": "Notices",
+    "notifications": "Notifications",
+    "unread": "{{count}} unread",
+    "skip": "Skip to content",
+    "preferences": "Display preferences",
+    "mainMenu": "Main"
+  },
+  "pagination": {
+    "page": "Page {{page}} of {{pages}}",
+    "showing": "Showing {{shown}} of {{total}}"
+  },
   "public": {
-    "signIn": "Sign in", "getInTouch": "Get in touch", "quickLinks": "Quick links", "phone": "Phone", "email": "Email",
-    "contactPage": "Contact page and map", "apply": "Apply for admission", "checkApplication": "Check an application",
-    "privacy": "Privacy notice", "portalSignIn": "Student, teacher and parent sign in"
+    "signIn": "Sign in",
+    "loggedIn": "You are signed in",
+    "loggedInAs": "Logged in: {{name}}",
+    "account": "Account",
+    "backToWebsite": "Back to website",
+    "getInTouch": "Get in touch",
+    "quickLinks": "Quick links",
+    "phone": "Phone",
+    "email": "Email",
+    "contactPage": "Contact page and map",
+    "apply": "Apply for admission",
+    "checkApplication": "Check an application",
+    "privacy": "Privacy notice",
+    "portalSignIn": "Student, teacher and parent sign in"
   }
 }

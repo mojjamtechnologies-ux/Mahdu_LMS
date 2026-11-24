@@ -38,7 +38,7 @@ export default function PortalLayout({
   nav: NavItem[];
   notificationsPath?: string;
 }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
   const unread = useUnreadCount(!!notificationsPath);
@@ -49,9 +49,12 @@ export default function PortalLayout({
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-[16rem_minmax(0,1fr)]">
       <header className="flex items-center justify-between gap-2 border-b-4 border-gold-400 bg-brand-500 px-4 py-3 text-white lg:hidden">
-        <span className="min-w-0 font-display text-base font-bold leading-tight">
-          [School Name]
-        </span>
+        <NavLink
+          to="/"
+          className="min-w-0 font-display text-base font-bold leading-tight"
+        >
+          ← {t("public.backToWebsite")}
+        </NavLink>
         <div className="flex shrink-0 items-center gap-2">
           <PreferenceControls variant="compact" onDark />
           {notificationsPath && (
@@ -82,9 +85,14 @@ export default function PortalLayout({
           <p className="font-display text-xl font-bold leading-tight">
             <Logo size={32} />
           </p>
-          <p className="mt-1 text-sm text-brand-100">{t(`roles.${user?.role ?? "admin"}`, { defaultValue: roleLabel })}</p>
+          <p className="mt-1 text-sm text-brand-100">
+            {t(`roles.${user?.role ?? "admin"}`, { defaultValue: roleLabel })}
+          </p>
         </div>
-        <nav aria-label={t("shell.mainMenu")} className="flex-1 space-y-1 overflow-y-auto p-3">
+        <nav
+          aria-label={t("shell.mainMenu")}
+          className="flex-1 space-y-1 overflow-y-auto p-3"
+        >
           {items.map((n) => (
             <NavLink
               key={n.to}
@@ -106,19 +114,43 @@ export default function PortalLayout({
               ) : null}
             </NavLink>
           ))}
+          <NavLink
+            to="/"
+            onClick={() => setOpen(false)}
+            className="mt-3 flex rounded-md border-t border-white/20 px-3 py-3 text-sm font-medium text-brand-100 hover:bg-white/10"
+          >
+            ← {t("public.backToWebsite")}
+          </NavLink>
         </nav>
         <div className="border-t border-white/20 p-4 text-sm">
           {user && (
-            <NavLink to={`/${user.role}/profile`} onClick={() => setOpen(false)} className="flex items-center gap-3 rounded-md p-1 hover:bg-white/10">
-              <Avatar userId={user.id} name={`${user.firstName} ${user.lastName}`} version={user.avatarVersion} size={40} className="border-2 border-gold-400" />
+            <NavLink
+              to={`/${user.role}/profile`}
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 rounded-md p-1 hover:bg-white/10"
+            >
+              <Avatar
+                userId={user.id}
+                name={`${user.firstName} ${user.lastName}`}
+                version={user.avatarVersion}
+                size={40}
+                className="border-2 border-gold-400"
+              />
               <span className="min-w-0">
-                <span className="block truncate font-medium">{user.firstName} {user.lastName}</span>
-                <span className="block truncate text-xs text-brand-100">{t(navKey("My profile"))}</span>
+                <span className="block truncate font-medium">
+                  {user.firstName} {user.lastName}
+                </span>
+                <span className="block truncate text-xs text-brand-100">
+                  {t(navKey("My profile"))}
+                </span>
               </span>
             </NavLink>
           )}
           <div className="mt-3 flex items-center justify-between gap-2">
-            <button onClick={logout} className="rounded-md border border-white/60 px-3 py-1.5 font-medium hover:bg-white/10">
+            <button
+              onClick={logout}
+              className="rounded-md border border-white/60 px-3 py-1.5 font-medium hover:bg-white/10"
+            >
               {t("actions.signOut")}
             </button>
             <PreferenceControls variant="compact" onDark />

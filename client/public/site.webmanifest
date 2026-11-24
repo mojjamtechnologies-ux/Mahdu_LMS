@@ -1,0 +1,8 @@
+{
+  "name": "معهد الرحمة الإسلامي",
+  "short_name": "معهد الرحمة",
+  "icons": [{ "src": "/mahdu.png", "type": "image/png" }],
+  "theme_color": "#19235c",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}
