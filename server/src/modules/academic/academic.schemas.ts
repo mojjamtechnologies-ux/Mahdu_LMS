@@ -59,7 +59,7 @@ export const createClassSchema = z
     arm,
   })
   .refine((b) => b.stage === "JSS" || b.year <= 3, {
-    message: "SSS has three years",
+    message: "Thaanawiy has three years",
     path: ["year"],
   });
 export const updateClassSchema = z
@@ -70,7 +70,7 @@ export const updateClassSchema = z
   })
   .refine((b) => Object.keys(b).length > 0, { message: "Nothing to change" })
   .refine((b) => b.stage !== "SSS" || b.year === undefined || b.year <= 3, {
-    message: "SSS has three years",
+    message: "Thaanawiy has three years",
     path: ["year"],
   });
 

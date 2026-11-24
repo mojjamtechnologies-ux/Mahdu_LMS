@@ -143,17 +143,33 @@ bdi,
   html.dark .bg-white {
     background-color: var(--color-surface);
   }
-  /* ID-card previews are printed documents, so keep their light surface and text contrast in dark mode. */
+  /* ID-card previews adapt to dark mode; the card template's custom colours remain unchanged. */
   html.dark .card-light.keep-colour {
+    background-color: #111827 !important;
+    color: #f9fafb !important;
+    border-color: #4b5563 !important;
+  }
+  /* Light and dark modes deliberately use different ID-card preview surfaces. */
+  html:not(.dark) .card-preview.keep-colour {
     background-color: #ffffff !important;
     color: #111827 !important;
+    border-color: #9ca3af !important;
   }
-  html.dark .card-light.keep-colour .text-gray-500,
-  html.dark .card-light.keep-colour .text-gray-600,
-  html.dark .card-light.keep-colour .text-gray-700,
-  html.dark .card-light.keep-colour .text-gray-800,
-  html.dark .card-light.keep-colour .text-gray-900 {
-    color: #4b5563 !important;
+  html.dark .card-preview.keep-colour {
+    background-color: #111827 !important;
+    color: #f9fafb !important;
+    border-color: #6b7280 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.42) !important;
+  }
+  html.dark .card-preview.keep-colour .text-gray-500,
+  html.dark .card-preview.keep-colour .text-gray-600,
+  html.dark .card-preview.keep-colour .text-gray-700,
+  html.dark .card-preview.keep-colour .text-gray-800,
+  html.dark .card-preview.keep-colour .text-gray-900 {
+    color: #d1d5db !important;
+  }
+  html.dark .card-preview.keep-colour .card-qr-wrap {
+    background-color: #ffffff;
   }
   html.dark .bg-brand-50,
   html.dark .hover\:bg-brand-50:hover {

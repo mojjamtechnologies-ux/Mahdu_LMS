@@ -34,7 +34,7 @@ const METHOD: Record<string, string> = {
   paystack: "Paystack (online)",
   other: "Other",
 };
-const CLASS_NAME = `c.stage || ' ' || c.year || coalesce(c.arm, '')`;
+const CLASS_NAME = `class_label(c.stage, c.year, c.arm)`;
 const notFound = () => new AppError(404, "Not found", "NOT_FOUND");
 
 type Viewer = { id: string; role: string };

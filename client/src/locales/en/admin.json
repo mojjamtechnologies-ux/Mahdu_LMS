@@ -194,5 +194,23 @@
     "recentActions": "Recent administrator actions",
     "nothingRecorded": "Nothing recorded yet.",
     "openAuditLog": "Open the full audit log"
+  },
+  "formTeachers": {
+    "title": "Form teachers",
+    "intro": "Each class has one form teacher per session. The form teacher takes that class's daily attendance register. Administrators can also take any register.",
+    "noSession": "Add a session first under Sessions and semesters.",
+    "session": "Session",
+    "current": "current",
+    "noTeachers": "There are no teacher accounts yet. Create them under Accounts first.",
+    "class": "Class",
+    "currentTeacher": "Current form teacher",
+    "change": "Change",
+    "noTeacherYet": "No form teacher yet",
+    "chooseTeacher": "Choose a teacher…",
+    "formTeacher": "Form teacher",
+    "saved": "Saved",
+    "save": "Save",
+    "remove": "Remove",
+    "noClasses": "No classes yet. Add them under Classes and subjects."
   }
 }

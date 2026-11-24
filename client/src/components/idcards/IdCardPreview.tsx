@@ -19,9 +19,9 @@ const ROLE_TITLE: Record<string, string> = {
   admin: "STAFF ID CARD",
 };
 
-// Cards are printed on paper, so the preview always shows the card in its printed (light) colours, even in dark mode.
+// The preview uses a light paper surface in light mode and a dark card surface in dark mode.
 const card =
-  "card-light keep-colour relative aspect-[85.6/53.98] w-full max-w-[26rem] overflow-hidden rounded-xl border border-gray-400 bg-white text-[#111827] shadow-md";
+  "card-preview keep-colour relative aspect-[85.6/53.98] w-full max-w-[26rem] overflow-hidden rounded-xl border border-gray-400 bg-white text-[#111827] shadow-md";
 
 function useLogo(show: boolean, key: string | null) {
   const [src, setSrc] = useState<string | null>(null);
@@ -183,7 +183,13 @@ export function CardBack({ face, tpl }: { face: CardFace; tpl: CardTemplate }) {
       <div className="h-[1.5%]" style={{ background: tpl.accentColor }} />
       <div className="flex gap-[4%] px-[4%] pt-[4%]">
         <div className="w-[30%] shrink-0 text-center">
-          <img src={face.qr} alt="QR" className="aspect-square w-full" />
+          <div className="card-qr-wrap rounded-sm p-[3%]">
+            <img
+              src={face.qr}
+              alt="QR"
+              className="keep-colour aspect-square w-full"
+            />
+          </div>
           <p className="mt-0.5 text-[0.42rem] uppercase text-gray-500 sm:text-[0.55rem]">
             {t("preview.scanToVerify")}
           </p>
