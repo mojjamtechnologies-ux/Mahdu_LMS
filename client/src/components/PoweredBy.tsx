@@ -2,7 +2,7 @@
 export default function PoweredBy({ className = "" }: { className?: string }) {
   return (
     <p className={`text-sm text-muted ${className}`}>
-      Designed by{" "}
+      Designed & Developed by{" "}
       <a
         href="https://www.cybersparkit.site"
         target="_blank"

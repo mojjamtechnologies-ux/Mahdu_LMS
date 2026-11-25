@@ -8,6 +8,7 @@ import type { SiteData } from "../lib/types";
 import { useAuth } from "../auth/AuthContext";
 import PoweredBy from "./PoweredBy";
 import Logo from "./Logo";
+import Avatar from "./Avatar";
 
 const NAV = [
   { to: "/", label: "Home", end: true },
@@ -72,22 +73,32 @@ export default function PublicLayout() {
               title={t("public.account")}
               className="flex h-9 w-9 items-center justify-center rounded-md border border-white/60 hover:bg-white/10"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                <polyline points="10 17 15 12 10 7" />
-                <line x1="15" y1="12" x2="3" y2="12" />
-              </svg>
+              {user ? (
+                <Avatar
+                  userId={user.id}
+                  name={`${user.firstName} ${user.lastName}`}
+                  version={user.avatarVersion}
+                  size={36}
+                  className="border border-white/70"
+                />
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                  <polyline points="10 17 15 12 10 7" />
+                  <line x1="15" y1="12" x2="3" y2="12" />
+                </svg>
+              )}
             </button>
             {utilityOpen && (
               <div
@@ -96,14 +107,26 @@ export default function PublicLayout() {
               >
                 {user ? (
                   <Link
-                    to={`/${user.role}`}
+                    to={`/${user.role}/profile`}
                     onClick={() => setUtilityOpen(false)}
-                    className="mb-3 block rounded-md bg-gold-400 px-4 py-2 text-center text-sm font-semibold text-brand-900 hover:bg-gold-500"
+                    className="mb-3 flex items-center gap-3 rounded-md bg-gold-400 px-3 py-2 text-brand-900 hover:bg-gold-500"
                     title={t("public.loggedIn")}
                   >
-                    {t("public.loggedInAs", {
-                      name: `${user.firstName} ${user.lastName}`.trim(),
-                    })}
+                    <Avatar
+                      userId={user.id}
+                      name={`${user.firstName} ${user.lastName}`}
+                      version={user.avatarVersion}
+                      size={40}
+                      className="border-2 border-white"
+                    />
+                    <span className="min-w-0">
+                      <span className="block truncate font-semibold">
+                        {`${user.firstName} ${user.lastName}`.trim()}
+                      </span>
+                      <span className="block text-xs">
+                        {t("nav.My profile")}
+                      </span>
+                    </span>
                   </Link>
                 ) : (
                   <Link
